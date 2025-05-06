@@ -6,12 +6,17 @@ import { useGeographic } from "ol/proj";
 
 import "ol/ol.css";
 import { trainStationLayer } from "../vectorLayers/trainStationLayer";
+import { railwayLayer } from "../vectorLayers/railwayLayer";
 
 useGeographic();
 
 const map = new Map({
   view: new View({ center: [10.8, 59.9], zoom: 10 }),
-  layers: [new TileLayer({ source: new OSM() }), trainStationLayer],
+  layers: [
+    new TileLayer({ source: new OSM() }),
+    trainStationLayer,
+    railwayLayer,
+  ],
 });
 
 export function Application() {
