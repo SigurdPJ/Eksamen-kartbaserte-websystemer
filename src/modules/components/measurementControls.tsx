@@ -1,18 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Draw } from "ol/interaction";
-import { Map } from "ol";
-import VectorSource from "ol/source/Vector";
 import { getLength } from "ol/sphere";
 import LineString from "ol/geom/LineString";
 import Point from "ol/geom/Point";
 import { Style, Stroke, Fill, Text, Circle as CircleStyle } from "ol/style";
-
-interface MeasurementControlsProps {
-  map: Map | null;
-  source: VectorSource;
-  activeTool: "draw" | "measure" | null;
-  setActiveTool: (tool: "draw" | "measure" | null) => void;
-}
+import { MeasurementControlsProps } from "../interfaces/MeasurementControlsProps";
 
 export const MeasurementControls: React.FC<MeasurementControlsProps> = ({
   map,

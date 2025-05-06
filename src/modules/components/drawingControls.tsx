@@ -1,16 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Draw } from "ol/interaction";
-import { Map } from "ol";
-import VectorSource from "ol/source/Vector";
-import VectorLayer from "ol/layer/Vector";
-
-interface DrawingControlsProps {
-  map: Map | null;
-  vectorSource: VectorSource;
-  vectorLayer: VectorLayer;
-  activeTool: "draw" | "measure" | null;
-  setActiveTool: (tool: "draw" | "measure" | null) => void;
-}
+import { DrawingControlsProps } from "../interfaces/DrawingControlsProps";
 
 export const DrawingControls: React.FC<DrawingControlsProps> = ({
   map,

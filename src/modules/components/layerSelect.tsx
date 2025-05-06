@@ -1,16 +1,11 @@
-// src/components/layerSelect.tsx
 import React from "react";
+import { LayerSelectProps } from "../interfaces/layerSelectProps";
 import { osmLayer } from "../tileLayers/osmLayer";
 import { stadiaLightLayer } from "../tileLayers/stadiaLightLayer";
 import { stadiaDarkLayer } from "../tileLayers/stadiaDarkLayer";
 import { aerialPhotoLayer } from "../tileLayers/aerialPhotoLayer";
 import { polarLayer } from "../tileLayers/polarLayer";
 import { mapboxLayer } from "../tileLayers/mapboxLayer";
-
-interface LayerSelectProps {
-  selectedLayer: string;
-  onLayerChange: (layer: string) => void;
-}
 
 export const getLayerByName = (layerName: string) => {
   switch (layerName) {
