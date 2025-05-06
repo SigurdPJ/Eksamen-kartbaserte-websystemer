@@ -14,11 +14,11 @@ import {
 import { drawingLayer, drawingSource } from "../vectorLayers/drawingLayer";
 
 // Component imports
-import { LayerSelect, getLayerByName } from "../components/layerSelect";
-import { ZoomToMeButton } from "../components/zoomToMeButton";
-import { ResetButton } from "../components/resetViewButton";
-import { DrawingControls } from "../components/drawingControls";
-import { MeasurementControls } from "../components/measurementControls";
+import { LayerSelect, getLayerByName } from "../components/LayerSelect";
+import { ZoomToMeButton } from "../components/ZoomToMeButton";
+import { ResetButton } from "../components/ResetViewButton";
+import { DrawingControls } from "../components/DrawingControls";
+import { MeasurementControls } from "../components/MeasurementControls";
 
 useGeographic();
 

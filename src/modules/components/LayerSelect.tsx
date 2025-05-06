@@ -1,5 +1,5 @@
 import React from "react";
-import { LayerSelectProps } from "../interfaces/layerSelectProps";
+import { LayerSelectProps } from "../interfaces/LayerSelectProps";
 import { osmLayer } from "../tileLayers/osmLayer";
 import { stadiaLightLayer } from "../tileLayers/stadiaLightLayer";
 import { stadiaDarkLayer } from "../tileLayers/stadiaDarkLayer";

@@ -1,8 +1,8 @@
 import React from "react";
 
-import AirportProperties from "../interfaces/AirportProperties";
+import AirportProps from "../interfaces/AirportProps";
 
-const AirportOverlay = ({ features }: { features: AirportProperties[] }) => {
+const AirportOverlay = ({ features }: { features: AirportProps[] }) => {
   if (features.length >= 1) {
     return (
       <div className={"overlayDiv"}>
