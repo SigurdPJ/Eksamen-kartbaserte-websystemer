@@ -1,15 +1,7 @@
-import React, { useEffect, useRef, useState, useMemo } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Map, View } from "ol";
 import { useGeographic } from "ol/proj";
 import "ol/ol.css";
-
-// Tile layer imports
-import { osmLayer } from "../tileLayers/osmLayer";
-import { stadiaLightLayer } from "../tileLayers/stadiaLightLayer";
-import { stadiaDarkLayer } from "../tileLayers/stadiaDarkLayer";
-import { aerialPhotoLayer } from "../tileLayers/aerialPhotoLayer";
-import { polarLayer } from "../tileLayers/polarLayer";
-import { mapboxLayer } from "../tileLayers/mapboxLayer";
 
 // Vector layer imports
 import { trainStationLayer } from "../vectorLayers/trainStationLayer";
@@ -22,7 +14,7 @@ import {
 import { drawingLayer, drawingSource } from "../vectorLayers/drawingLayer";
 
 // Component imports
-import { LayerSelect } from "../components/layerSelect";
+import { LayerSelect, getLayerByName } from "../components/layerSelect";
 import { ZoomToMeButton } from "../components/zoomToMeButton";
 import { ResetButton } from "../components/resetViewButton";
 import { DrawingControls } from "../components/drawingControls";
@@ -44,22 +36,7 @@ export function Application() {
   const [map, setMap] = useState<Map | null>(null);
   const [activeTool, setActiveTool] = useState<"draw" | "measure" | null>(null);
 
-  const currentLayer = useMemo(() => {
-    switch (selectedLayer) {
-      case "stadia-light":
-        return stadiaLightLayer;
-      case "stadia-dark":
-        return stadiaDarkLayer;
-      case "aerial-photo":
-        return aerialPhotoLayer;
-      case "polar-layer":
-        return polarLayer;
-      case "mapbox":
-        return mapboxLayer;
-      default:
-        return osmLayer;
-    }
-  }, [selectedLayer]);
+  const currentLayer = getLayerByName(selectedLayer);
 
   useEffect(() => {
     if (!mapRef.current) return;
