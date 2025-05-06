@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Map, View } from "ol";
+import { Map, View, Overlay } from "ol";
 import { useGeographic } from "ol/proj";
 import "ol/ol.css";
 
@@ -19,11 +19,13 @@ import { ZoomToMeButton } from "../components/ZoomToMeButton";
 import { ResetButton } from "../components/ResetViewButton";
 import { DrawingControls } from "../components/DrawingControls";
 import { MeasurementControls } from "../components/MeasurementControls";
+import AirportOverlay from "../components/AirportOverlay";
 
 useGeographic();
 
 export function Application() {
   const mapRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
   const [selectedLayer, setSelectedLayer] = useState("osm");
   const [view, setView] = useState(
     () =>
@@ -35,6 +37,7 @@ export function Application() {
   );
   const [map, setMap] = useState<Map | null>(null);
   const [activeTool, setActiveTool] = useState<"draw" | "measure" | null>(null);
+  const [selectedAirport, setSelectedAirport] = useState<any[]>([]);
 
   const currentLayer = getLayerByName(selectedLayer);
 
@@ -46,12 +49,34 @@ export function Application() {
       layers: [currentLayer, drawingLayer, measurementLayer],
     });
 
+    // Add overlay for airports
+    const overlay = new Overlay({
+      element: overlayRef.current || undefined,
+      autoPan: true,
+    });
+    newMap.addOverlay(overlay);
+
+    // Add click handler for airports
+    newMap.on("click", (e) => {
+      const features = newMap.getFeaturesAtPixel(e.pixel, {
+        layerFilter: (layer) => layer === airportLayer,
+        hitTolerance: 5,
+      });
+
+      if (features && features.length > 0) {
+        setSelectedAirport(features.map((f) => f.getProperties()));
+        overlay.setPosition(e.coordinate);
+      } else {
+        setSelectedAirport([]);
+        overlay.setPosition(undefined);
+      }
+    });
+
     newMap.setTarget(mapRef.current);
     setMap(newMap);
 
     return () => {
       newMap.setTarget(undefined);
-      newMap.dispose();
     };
   }, []);
 
@@ -83,7 +108,7 @@ export function Application() {
       map.addLayer(drawingLayer);
       map.addLayer(measurementLayer);
     }
-  }, [currentLayer, map, trainStationLayer, airportLayer, railwayLayer]);
+  }, [currentLayer, map]);
 
   return (
     <>
@@ -113,7 +138,11 @@ export function Application() {
           <ZoomToMeButton view={view} />
         </div>
       </section>
-      <div ref={mapRef} className="map-view" />
+      <div ref={mapRef} className="map-view">
+        <div ref={overlayRef}>
+          <AirportOverlay features={selectedAirport} />
+        </div>
+      </div>
     </>
   );
 }
