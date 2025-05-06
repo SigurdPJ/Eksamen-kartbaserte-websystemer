@@ -5,8 +5,8 @@ import { Icon, Style, Circle as CircleStyle, Fill, Stroke } from "ol/style";
 
 const airplaneIconStyle = new Style({
   image: new Icon({
-    src: "/icons/fluent-emoji--airplane.svg",
-    scale: 1.2,
+    src: "/icons/fluent-emoji--airplane.png",
+    scale: 0.5,
     anchor: [0.5, 1],
   }),
 });

@@ -5,8 +5,8 @@ import { Icon, Style } from "ol/style";
 
 const trainIconStyle = new Style({
   image: new Icon({
-    src: "/icons/fluent-emoji--station.svg",
-    scale: 1,
+    src: "/icons/fluent-emoji--station.png",
+    scale: 0.5,
     anchor: [0.5, 1],
   }),
 });
