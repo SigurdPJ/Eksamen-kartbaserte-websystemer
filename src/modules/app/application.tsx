@@ -1,31 +1,155 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import { Map, View } from "ol";
-import TileLayer from "ol/layer/Tile";
-import { OSM } from "ol/source";
+import VectorLayer from "ol/layer/Vector";
+import VectorSource from "ol/source/Vector";
 import { useGeographic } from "ol/proj";
-
 import "ol/ol.css";
+
+// Tile layer imports
+import { osmLayer } from "../tileLayers/osmLayer";
+import { stadiaLightLayer } from "../tileLayers/stadiaLightLayer";
+import { stadiaDarkLayer } from "../tileLayers/stadiaDarkLayer";
+import { aerialPhotoLayer } from "../tileLayers/aerialPhotoLayer";
+import { polarLayer } from "../tileLayers/polarLayer";
+import { mapboxLayer } from "../tileLayers/mapboxLayer";
+
+// Vector layer imports
 import { trainStationLayer } from "../vectorLayers/trainStationLayer";
 import { airportLayer } from "../vectorLayers/airportLayer";
 import { railwayLayer } from "../vectorLayers/railwayLayer";
 
+// Component imports
+import { LayerSelect } from "../components/layerSelect";
+import { ZoomToMeButton } from "../components/zoomToMeButton";
+import { ResetButton } from "../components/resetViewButton";
+import { DrawingControls } from "../components/drawingControls";
+import { MeasurementControls } from "../components/measurementControls";
+
 useGeographic();
 
-const map = new Map({
-  view: new View({ center: [10.8, 59.9], zoom: 10 }),
-  layers: [
-    new TileLayer({ source: new OSM() }),
-    trainStationLayer,
-    airportLayer,
-    railwayLayer,
-  ],
-});
-
 export function Application() {
-  const mapRef = useRef<HTMLDivElement | null>(null);
+  const mapRef = useRef<HTMLDivElement>(null);
+  const [selectedLayer, setSelectedLayer] = useState("osm");
+  const [view, setView] = useState(
+    () =>
+      new View({
+        center: [10.8, 59.9],
+        zoom: 7,
+        projection: "EPSG:4326",
+      }),
+  );
+  const [map, setMap] = useState<Map | null>(null);
+  const [activeTool, setActiveTool] = useState<"draw" | "measure" | null>(null);
+  const drawingSource = useRef(new VectorSource());
+  const measurementSource = useRef(new VectorSource());
+
+  const drawingLayer = useMemo(
+    () => new VectorLayer({ source: drawingSource.current }),
+    [],
+  );
+
+  const measurementLayer = useMemo(
+    () =>
+      new VectorLayer({
+        source: measurementSource.current,
+        projection: "EPSG:4326",
+      } as any),
+    [],
+  );
+
+  const currentLayer = useMemo(() => {
+    switch (selectedLayer) {
+      case "stadia-light":
+        return stadiaLightLayer;
+      case "stadia-dark":
+        return stadiaDarkLayer;
+      case "aerial-photo":
+        return aerialPhotoLayer;
+      case "polar-layer":
+        return polarLayer;
+      case "mapbox":
+        return mapboxLayer;
+      default:
+        return osmLayer;
+    }
+  }, [selectedLayer]);
+
   useEffect(() => {
-    map.setTarget(mapRef.current!);
+    if (!mapRef.current) return;
+
+    const newMap = new Map({
+      view: view,
+      layers: [currentLayer, drawingLayer, measurementLayer],
+    });
+
+    newMap.setTarget(mapRef.current);
+    setMap(newMap);
+
+    return () => {
+      newMap.setTarget(undefined);
+      newMap.dispose();
+    };
   }, []);
 
-  return <div ref={mapRef}></div>;
+  useEffect(() => {
+    if (map) map.setView(view);
+  }, [view, map]);
+
+  useEffect(() => {
+    const projection = currentLayer.getSource()?.getProjection();
+    if (projection) {
+      setView(
+        (v) =>
+          new View({
+            center: v.getCenter(),
+            zoom: v.getZoom(),
+            projection,
+          }),
+      );
+    }
+  }, [currentLayer]);
+
+  useEffect(() => {
+    if (map) {
+      map.getLayers().clear();
+      map.addLayer(currentLayer);
+      map.addLayer(trainStationLayer);
+      map.addLayer(airportLayer);
+      map.addLayer(railwayLayer);
+      map.addLayer(drawingLayer);
+      map.addLayer(measurementLayer);
+    }
+  }, [currentLayer, map, trainStationLayer, airportLayer, railwayLayer]);
+
+  return (
+    <>
+      <section>
+        <LayerSelect
+          selectedLayer={selectedLayer}
+          onLayerChange={setSelectedLayer}
+        />
+        <br />
+        <div className="control-group">
+          <DrawingControls
+            map={map}
+            vectorSource={drawingSource.current}
+            vectorLayer={drawingLayer}
+            activeTool={activeTool}
+            setActiveTool={setActiveTool}
+          />
+          <br />
+          <MeasurementControls
+            map={map}
+            source={measurementSource.current}
+            activeTool={activeTool}
+            setActiveTool={setActiveTool}
+          />
+          <br />
+          <ResetButton view={view} />
+          <ZoomToMeButton view={view} />
+        </div>
+      </section>
+      <div ref={mapRef} className="map-view" />
+    </>
+  );
 }
