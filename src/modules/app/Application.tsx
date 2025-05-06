@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Map, View, Overlay } from "ol";
 import { useGeographic } from "ol/proj";
 import "ol/ol.css";
+import "./Application.css";
 
 // Vector layer imports
 import { trainStationLayer } from "../vectorLayers/trainStationLayer";
@@ -20,6 +21,7 @@ import { ResetButton } from "../components/ResetViewButton";
 import { DrawingControls } from "../components/DrawingControls";
 import { MeasurementControls } from "../components/MeasurementControls";
 import AirportOverlay from "../components/AirportOverlay";
+import { OverviewMapControl } from "../components/OverviewMapControl";
 
 useGeographic();
 
@@ -142,6 +144,7 @@ export function Application() {
         <div ref={overlayRef}>
           <AirportOverlay features={selectedAirport} />
         </div>
+        {map && <OverviewMapControl map={map} collapsed={true} />}
       </div>
     </>
   );

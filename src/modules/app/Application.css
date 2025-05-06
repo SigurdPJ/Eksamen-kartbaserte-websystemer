@@ -1,0 +1,19 @@
+/* Main map container */
+.map-view {
+  position: relative;
+  width: 100%;
+  height: 90%;
+}
+
+/* Mini map inside overview */
+.ol-overviewmap .ol-overviewmap-map {
+  width: 200px;
+  height: 200px;
+  border: 2px solid black;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
+}
+
+/* View indicator */
+.ol-overviewmap .ol-overviewmap-box {
+  border: 3px solid hotpink;
+}
