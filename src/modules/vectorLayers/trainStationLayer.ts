@@ -5,13 +5,7 @@ import { Stroke, Style } from "ol/style";
 
 export const trainStationLayer = new VectorLayer({
   source: new VectorSource({
-    url: "geojson/jernbanestasjoner-N50.geojson",
+    url: "geojson/jernbanestasjoner.geojson",
     format: new GeoJSON(),
-  }),
-  style: new Style({
-    stroke: new Stroke({
-      color: "white",
-      width: 2,
-    }),
   }),
 });
