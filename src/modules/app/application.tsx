@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState, useMemo } from "react";
 import { Map, View } from "ol";
-import VectorLayer from "ol/layer/Vector";
-import VectorSource from "ol/source/Vector";
 import { useGeographic } from "ol/proj";
 import "ol/ol.css";
 
@@ -17,6 +15,11 @@ import { mapboxLayer } from "../tileLayers/mapboxLayer";
 import { trainStationLayer } from "../vectorLayers/trainStationLayer";
 import { airportLayer } from "../vectorLayers/airportLayer";
 import { railwayLayer } from "../vectorLayers/railwayLayer";
+import {
+  measurementLayer,
+  measurementSource,
+} from "../vectorLayers/measurementLayer";
+import { drawingLayer, drawingSource } from "../vectorLayers/drawingLayer";
 
 // Component imports
 import { LayerSelect } from "../components/layerSelect";
@@ -40,22 +43,6 @@ export function Application() {
   );
   const [map, setMap] = useState<Map | null>(null);
   const [activeTool, setActiveTool] = useState<"draw" | "measure" | null>(null);
-  const drawingSource = useRef(new VectorSource());
-  const measurementSource = useRef(new VectorSource());
-
-  const drawingLayer = useMemo(
-    () => new VectorLayer({ source: drawingSource.current }),
-    [],
-  );
-
-  const measurementLayer = useMemo(
-    () =>
-      new VectorLayer({
-        source: measurementSource.current,
-        projection: "EPSG:4326",
-      } as any),
-    [],
-  );
 
   const currentLayer = useMemo(() => {
     switch (selectedLayer) {
@@ -132,7 +119,7 @@ export function Application() {
         <div className="control-group">
           <DrawingControls
             map={map}
-            vectorSource={drawingSource.current}
+            vectorSource={drawingSource}
             vectorLayer={drawingLayer}
             activeTool={activeTool}
             setActiveTool={setActiveTool}
@@ -140,7 +127,7 @@ export function Application() {
           <br />
           <MeasurementControls
             map={map}
-            source={measurementSource.current}
+            source={measurementSource}
             activeTool={activeTool}
             setActiveTool={setActiveTool}
           />
