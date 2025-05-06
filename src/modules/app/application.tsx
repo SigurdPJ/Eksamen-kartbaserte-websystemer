@@ -6,6 +6,7 @@ import { useGeographic } from "ol/proj";
 
 import "ol/ol.css";
 import { trainStationLayer } from "../vectorLayers/trainStationLayer";
+import { airportLayer } from "../vectorLayers/airportLayer";
 import { railwayLayer } from "../vectorLayers/railwayLayer";
 
 useGeographic();
@@ -15,6 +16,7 @@ const map = new Map({
   layers: [
     new TileLayer({ source: new OSM() }),
     trainStationLayer,
+    airportLayer,
     railwayLayer,
   ],
 });
