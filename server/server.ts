@@ -17,6 +17,7 @@ app.get("/api/culturalheritage", async (c) => {
              ST_AsGeoJSON(ST_Transform(lokalitet.omrade, 4326)) AS geometry
       FROM ${schema}.lokalitet
       WHERE synlig = true
+      LIMIT 1000
   `);
 
   return c.json({
