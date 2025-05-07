@@ -5,7 +5,10 @@ import "ol/ol.css";
 import "./Application.css";
 
 // Vector layer imports
-import { trainStationLayer } from "../vectorLayers/trainStationLayer";
+import {
+  trainStationLayer,
+  trainStationLayerClustered,
+} from "../vectorLayers/trainStationLayer";
 import { airportLayer } from "../vectorLayers/airportLayer";
 import { railwayLayer } from "../vectorLayers/railwayLayer";
 import {
@@ -22,6 +25,7 @@ import { DrawingControls } from "../components/DrawingControls";
 import { MeasurementControls } from "../components/MeasurementControls";
 import AirportOverlay from "../components/AirportOverlay";
 import { OverviewMapControl } from "../components/OverviewMapControl";
+import { ClusterStationsToggle } from "../components/ClusterStationsToggle";
 
 useGeographic();
 
@@ -40,8 +44,12 @@ export function Application() {
   const [map, setMap] = useState<Map | null>(null);
   const [activeTool, setActiveTool] = useState<"draw" | "measure" | null>(null);
   const [selectedAirport, setSelectedAirport] = useState<any[]>([]);
+  const [useClustering, setUseClustering] = useState(false);
 
   const currentLayer = getLayerByName(selectedLayer);
+  const activeTrainStationLayer = useClustering
+    ? trainStationLayerClustered
+    : trainStationLayer;
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -51,14 +59,12 @@ export function Application() {
       layers: [currentLayer, drawingLayer, measurementLayer],
     });
 
-    // Add overlay for airports
     const overlay = new Overlay({
       element: overlayRef.current || undefined,
       autoPan: true,
     });
     newMap.addOverlay(overlay);
 
-    // Add click handler for airports
     newMap.on("click", (e) => {
       const features = newMap.getFeaturesAtPixel(e.pixel, {
         layerFilter: (layer) => layer === airportLayer,
@@ -104,13 +110,13 @@ export function Application() {
     if (map) {
       map.getLayers().clear();
       map.addLayer(currentLayer);
-      map.addLayer(trainStationLayer);
+      map.addLayer(activeTrainStationLayer); // Clustering toggles this
       map.addLayer(airportLayer);
       map.addLayer(railwayLayer);
       map.addLayer(drawingLayer);
       map.addLayer(measurementLayer);
     }
-  }, [currentLayer, map]);
+  }, [currentLayer, activeTrainStationLayer, map]);
 
   return (
     <>
@@ -118,6 +124,11 @@ export function Application() {
         <LayerSelect
           selectedLayer={selectedLayer}
           onLayerChange={setSelectedLayer}
+        />
+        <br />
+        <ClusterStationsToggle
+          useClustering={useClustering}
+          setUseClustering={setUseClustering}
         />
         <br />
         <div className="control-group">
