@@ -13,12 +13,12 @@ const app = new Hono();
 
 app.get("/api/culturalheritage", async (c) => {
   const result = await postgresql.query(`
-      SELECT navn, opphav, informasjon,
-             ST_AsGeoJSON(ST_Transform(lokalitet.omrade, 4326)) AS geometry
-      FROM ${schema}.lokalitet
-      WHERE synlig = true
-      LIMIT 1000
-  `);
+        SELECT navn, opphav, informasjon,
+               ST_AsGeoJSON(ST_Transform(lokalitet.omrade, 4326)) AS geometry
+        FROM ${schema}.lokalitet
+        WHERE synlig = true
+            LIMIT 1000
+    `);
 
   return c.json({
     type: "FeatureCollection",
@@ -33,4 +33,6 @@ app.get("/api/culturalheritage", async (c) => {
   });
 });
 
-serve(app);
+// Heroku fix?
+const port = parseInt(process.env.PORT || "3000", 10);
+serve({ fetch: app.fetch, port });
