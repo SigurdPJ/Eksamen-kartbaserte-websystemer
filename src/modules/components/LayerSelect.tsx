@@ -53,7 +53,7 @@ export const LayerSelect: React.FC<LayerSelectProps> = ({
   }, []);
 
   return (
-    <div ref={dropdownRef}>
+    <div ref={dropdownRef} className="layer-select-wrapper">
       <button
         className="layer-select-button"
         onClick={() => setIsOpen(!isOpen)}
@@ -64,18 +64,21 @@ export const LayerSelect: React.FC<LayerSelectProps> = ({
 
       {isOpen && (
         <div className="layer-select-dropdown">
-          {layers.map((layer) => (
-            <div
-              key={layer.id}
-              className="layer-option"
-              onClick={() => {
-                onLayerChange(layer.id);
-                setIsOpen(false);
-              }}
-            >
-              <img src={layer.icon} alt={layer.name} />
-            </div>
-          ))}
+          {layers
+            .filter((layer) => layer.id !== selected.id)
+            .map((layer) => (
+              <div
+                key={layer.id}
+                className="layer-option"
+                onClick={() => {
+                  onLayerChange(layer.id);
+                  setIsOpen(false);
+                }}
+              >
+                <img src={layer.icon} alt={layer.name} />
+                {layer.name}
+              </div>
+            ))}
         </div>
       )}
     </div>

@@ -34,6 +34,7 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
+  overflow: hidden;
 }
 .main-content {
   display: flex;
@@ -42,25 +43,26 @@
 }
 
 .sidebar {
+  align-items: stretch;
   width: 250px;
   padding: 1rem;
   background-color: white;
-  overflow-y: auto;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 1rem;
   border-right: 4px dashed #b8ecff;
+  overflow: hidden;
 }
 
 /*Kode for å velge karttype*/
 
 .layer-option {
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 1rem;
+  padding: 0.2rem 0.5rem;
   cursor: pointer;
   transition: background 0.2s ease;
 }
@@ -68,10 +70,9 @@
 .layer-option:hover {
   background-color: #b8ecff;
 }
-
-.layer-select-dropdown {
-  border: 2px dashed #b8ecff;
-  border-radius: 4px;
+.layer-select-wrapper {
+  position: relative;
+  width: 100%;
 }
 
 .layer-select-button {
@@ -84,8 +85,22 @@
   border: 2px solid #b8ecff;
   border-radius: 4px;
   cursor: pointer;
+  width: 100%;
 }
 
+.layer-select-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: white;
+  border: 1px solid #b8ecff;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  font-size: small;
+}
 /*Styling for kontroll i sidebar*/
 .sidebar-button {
   padding: 0.5rem 1rem;
