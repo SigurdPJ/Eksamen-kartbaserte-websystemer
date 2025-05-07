@@ -7,6 +7,11 @@ const AirportOverlay = ({ features }: { features: AirportProps[] }) => {
 
     return (
       <div className={"overlayDiv"}>
+        <img
+          src="/icons/fluent-emoji--airplane.png"
+          alt="Plane icon"
+          className="overlayIcon"
+        />
         <h3>Flyplassinfo</h3>
         <p>
           <strong>Flyplassnavn:</strong> {airport.navn}

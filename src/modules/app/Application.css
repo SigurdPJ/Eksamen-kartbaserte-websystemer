@@ -34,7 +34,6 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  overflow: hidden;
 }
 .main-content {
   display: flex;
@@ -52,7 +51,8 @@
   flex-direction: column;
   gap: 1rem;
   border-right: 4px dashed #b8ecff;
-  overflow: hidden;
+  max-height: 100vh;
+  overflow-y: auto;
 }
 
 /*Kode for å velge karttype*/
@@ -119,4 +119,39 @@
 .sidebar-button:hover {
   background-color: #b8ecff;
   transform: scale(1.02);
+}
+
+.overlayDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+  border: solid 3px #b8ecff;
+  padding: 0.2rem;
+  border-radius: 1rem;
+  font-size: 12px;
+}
+.overlayIcon {
+  width: 24px;
+  height: 24px;
+  margin-bottom: 0.5rem;
+}
+
+.undo-or-delete-panel {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.undo-or-delete-panel .sidebar-button {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+}
+
+.control-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 10px;
+  text-align: center;
+  border: solid 2px #b8ecff;
 }

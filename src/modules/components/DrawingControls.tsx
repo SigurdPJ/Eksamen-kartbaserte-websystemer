@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Draw } from "ol/interaction";
 import { DrawingControlsProps } from "../interfaces/DrawingControlsProps";
-import { Icon, Style } from "ol/style";
+import { Icon, Style, Stroke, Fill, Circle as CircleStyle } from "ol/style";
 
 export const DrawingControls: React.FC<DrawingControlsProps> = ({
   map,
@@ -9,9 +9,15 @@ export const DrawingControls: React.FC<DrawingControlsProps> = ({
   activeTool,
   setActiveTool,
 }) => {
-  const [drawType, setDrawType] = useState<string>("Point");
+  const [drawType, setDrawType] = useState<
+    "Point" | "LineString" | "Polygon" | "Circle"
+  >("LineString");
+  const [iconType, setIconType] = useState<string>(
+    "/icons/fluent-emoji--heart-exclamation.png",
+  );
   const [drawInteraction, setDrawInteraction] = useState<Draw | null>(null);
   const [hasFeatures, setHasFeatures] = useState(false);
+  const [isIconMode, setIsIconMode] = useState(false);
 
   useEffect(() => {
     const checkFeatures = () => {
@@ -40,21 +46,37 @@ export const DrawingControls: React.FC<DrawingControlsProps> = ({
 
     const newDraw = new Draw({
       source: vectorSource,
-      type: drawType as any,
+      type: isIconMode ? "Point" : drawType,
     });
-
     newDraw.on("drawend", (event) => {
-      //Lagde hjerteemoji!!!!
       const feature = event.feature;
-      if (drawType === "Point") {
+
+      if (isIconMode && drawType === "Point") {
         const iconStyle = new Style({
           image: new Icon({
-            src: "/icons/fluent-emoji--heart-exclamation.png",
+            src: iconType,
             scale: 0.5,
           }),
         });
         feature.setStyle(iconStyle);
+      } else {
+        const defaultStyle = new Style({
+          stroke: new Stroke({
+            color: "#3399CC",
+            width: 2,
+          }),
+          fill: new Fill({
+            color: "rgba(51, 153, 204, 0.2)",
+          }),
+          image: new CircleStyle({
+            radius: 5,
+            fill: new Fill({ color: "#3399CC" }),
+            stroke: new Stroke({ color: "#fff", width: 1 }),
+          }),
+        });
+        feature.setStyle(defaultStyle);
       }
+
       setHasFeatures(vectorSource.getFeatures().length > 0);
     });
 
@@ -64,7 +86,7 @@ export const DrawingControls: React.FC<DrawingControlsProps> = ({
     return () => {
       map.removeInteraction(newDraw);
     };
-  }, [drawType, map, activeTool]);
+  }, [drawType, map, activeTool, iconType, isIconMode]);
 
   const undoLastPoint = () => {
     const features = vectorSource.getFeatures();
@@ -82,42 +104,72 @@ export const DrawingControls: React.FC<DrawingControlsProps> = ({
     setActiveTool(activeTool === "draw" ? null : "draw");
   };
 
+  const toggleIconMode = () => {
+    setIsIconMode(!isIconMode);
+    setDrawType("Point");
+    setActiveTool("draw");
+  };
+
   return (
-    <>
-      <select
-        value={drawType}
-        onChange={(e) => {
-          setDrawType(e.target.value);
-          if (activeTool !== "draw") {
-            setActiveTool("draw");
-          }
-        }}
-      >
-        <option value="Point">Point</option>
-        <option value="LineString">LineString</option>
-        <option value="Polygon">Polygon</option>
-        <option value="Circle">Circle</option>
-      </select>
+    <div className="sidebar-controls">
+      <div className="control-section" id="draw-icon-section">
+        <p>
+          Velg ikoner og merk steder du liker, vil besøke eller steder du vil
+          campe.
+        </p>
+        <select
+          className="sidebar-button"
+          value={iconType}
+          onChange={(e) => setIconType(e.target.value)}
+        >
+          <option value="/icons/fluent-emoji--heart-exclamation.png">
+            Hjerte
+          </option>
+          <option value="/icons/fluent-emoji--glowing-star.png">Stjerne</option>
+          <option value="/icons/fluent-emoji--camping.png">Camping</option>
+        </select>
+        <button className="sidebar-button" onClick={toggleIconMode}>
+          {isIconMode ? "Avbryt" : "Plasser ikoner"}
+        </button>
 
-      <button className="sidebar-button" onClick={toggleDrawing}>
-        {activeTool === "draw" ? "Stop Drawing" : "Draw"}
-      </button>
+        <div className="undo-or-delete-panel">
+          <button
+            className="sidebar-button half"
+            onClick={undoLastPoint}
+            disabled={!hasFeatures}
+          >
+            Angre
+          </button>
+          <button
+            className="sidebar-button half"
+            onClick={clearAll}
+            disabled={!hasFeatures}
+          >
+            Slett alt
+          </button>
+        </div>
+      </div>
 
-      <button
-        className="sidebar-button"
-        onClick={undoLastPoint}
-        disabled={!hasFeatures}
-      >
-        Undo
-      </button>
+      <div className="control-section" id="draw-section">
+        <p>Tegn på kartet, gjør hva du vil med det!</p>
+        <select
+          className="sidebar-button"
+          value={drawType}
+          onChange={(e) =>
+            setDrawType(
+              e.target.value as "Point" | "LineString" | "Polygon" | "Circle",
+            )
+          } // typecasting
+        >
+          <option value="LineString">Linje</option>
+          <option value="Polygon">Polygon</option>
+          <option value="Circle">Sirkel</option>
+        </select>
 
-      <button
-        className="sidebar-button"
-        onClick={clearAll}
-        disabled={!hasFeatures}
-      >
-        Clear
-      </button>
-    </>
+        <button className="sidebar-button" onClick={toggleDrawing}>
+          {activeTool === "draw" ? "Stopp" : "Tegn"}
+        </button>
+      </div>
+    </div>
   );
 };
