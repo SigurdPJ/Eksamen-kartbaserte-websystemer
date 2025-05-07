@@ -10,6 +10,11 @@ const TrainStationOverlay = ({
   if (features.length >= 1) {
     return (
       <div className={"overlayDiv"}>
+        <img
+          src="/icons/fluent-emoji--station.png"
+          alt="Train icon"
+          className="overlayIcon"
+        />
         <h3>Togstasjon</h3>
         <p>
           <strong>Stasjonsnavn :</strong> {features[0].navn}
