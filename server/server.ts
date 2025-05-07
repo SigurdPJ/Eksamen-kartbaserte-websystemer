@@ -11,7 +11,6 @@ const schema = "kulturminner_178e81c5b4f1432e84e3e50b55042a3e";
 
 const app = new Hono();
 
-/*
 // CORS FIX
 app.use("*", async (c, next) => {
   c.header("Access-Control-Allow-Origin", "http://localhost:5173");
@@ -23,7 +22,7 @@ app.use("*", async (c, next) => {
   }
 
   return await next();
-});*/
+});
 
 app.get("/api/culturalheritage", async (c) => {
   const result = await postgresql.query(`
@@ -31,7 +30,6 @@ app.get("/api/culturalheritage", async (c) => {
              ST_AsGeoJSON(ST_Transform(lokalitet.omrade, 4326)) AS geometry
       FROM ${schema}.lokalitet
       WHERE synlig = true
-      LIMIT 9
     `);
 
   return c.json({

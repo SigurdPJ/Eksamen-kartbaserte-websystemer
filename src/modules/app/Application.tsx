@@ -9,8 +9,9 @@ import {
   trainStationLayer,
   trainStationLayerClustered,
 } from "../vectorLayers/trainStationLayer";
-import { airportLayer } from "../vectorLayers/airportLayer"; // Import airports layer
+import { airportLayer } from "../vectorLayers/airportLayer";
 import { railwayLayer } from "../vectorLayers/railwayLayer";
+import { culturalHeritageLayer } from "../vectorLayers/culturalHeritageLayer";
 import {
   measurementLayer,
   measurementSource,
@@ -52,7 +53,7 @@ export function Application() {
   const [selectedAirport, setSelectedAirport] = useState<any[]>([]);
   const [useClustering, setUseClustering] = useState(false);
   const [showTrainStations, setShowTrainStations] = useState(false);
-  const [showTrainlines, setShowTrainlines] = useState(false);
+  const [showRailways, setShowRailways] = useState(false);
   const [showAirports, setShowAirports] = useState(false);
   const [selectedTrainStation, setSelectedTrainStation] = useState<
     TrainStationProps[]
@@ -145,26 +146,41 @@ export function Application() {
   }, [currentLayer]);
 
   useEffect(() => {
-    if (map) {
+    if (!map) return;
+
+    const updateLayers = async () => {
       map.getLayers().clear();
       map.addLayer(currentLayer);
+
       if (showTrainStations) {
         map.addLayer(activeTrainStationLayer);
       }
-      if (showTrainlines) {
+
+      if (showRailways) {
         map.addLayer(railwayLayer);
       }
+
       if (showAirports) {
         map.addLayer(airportLayer);
       }
+
+      try {
+        const heritageLayer = await culturalHeritageLayer();
+        map.addLayer(heritageLayer);
+      } catch (error) {
+        console.error("Failed to load cultural heritage layer:", error);
+      }
+
       map.addLayer(drawingLayer);
       map.addLayer(measurementLayer);
-    }
+    };
+
+    updateLayers();
   }, [
     currentLayer,
     activeTrainStationLayer,
     showTrainStations,
-    showTrainlines,
+    showRailways,
     showAirports,
     map,
   ]);
@@ -191,8 +207,8 @@ export function Application() {
                 setShow={setShowTrainStations}
               />
               <ShowTrainLinesToggle
-                show={showTrainlines}
-                setShow={setShowTrainlines}
+                show={showRailways}
+                setShow={setShowRailways}
               />
               <ShowAirportsToggle
                 show={showAirports}
@@ -207,14 +223,12 @@ export function Application() {
                 activeTool={activeTool}
                 setActiveTool={setActiveTool}
               />
-
               <MeasurementControls
                 map={map}
                 source={measurementSource}
                 activeTool={activeTool}
                 setActiveTool={setActiveTool}
               />
-
               <ResetButton view={view} />
               <ZoomToMeButton view={view} />
             </div>
