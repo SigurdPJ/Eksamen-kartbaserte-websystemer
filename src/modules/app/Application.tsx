@@ -29,12 +29,15 @@ import { ClusterStationsToggle } from "../components/ClusterStationsToggle";
 import { ShowTrainStationsToggle } from "../components/ShowTrainStationsToggle";
 import { ShowTrainLinesToggle } from "../components/ShowTrainLinesToggle";
 import { ShowAirportsToggle } from "../components/ShowAirportsToggle";
+import TrainStationProps from "../interfaces/TrainStationProps";
+import TrainStationOverlay from "../components/TrainStationOverlay";
 
 useGeographic();
 
 export function Application() {
   const mapRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
+  const trainStationOverlayRef = useRef<HTMLDivElement>(null);
   const [selectedLayer, setSelectedLayer] = useState("osm");
   const [view, setView] = useState(
     () =>
@@ -51,6 +54,9 @@ export function Application() {
   const [showTrainStations, setShowTrainStations] = useState(false);
   const [showTrainlines, setShowTrainlines] = useState(false);
   const [showAirports, setShowAirports] = useState(false);
+  const [selectedTrainStation, setSelectedTrainStation] = useState<
+    TrainStationProps[]
+  >([]);
 
   const currentLayer = getLayerByName(selectedLayer);
   const activeTrainStationLayer = useClustering
@@ -71,18 +77,44 @@ export function Application() {
     });
     newMap.addOverlay(overlay);
 
+    const trainStationOverlay = new Overlay({
+      element: trainStationOverlayRef.current || undefined,
+      autoPan: true,
+    });
+    newMap.addOverlay(trainStationOverlay);
+
     newMap.on("click", (e) => {
-      const features = newMap.getFeaturesAtPixel(e.pixel, {
+      // Airport features
+      const airportFeatures = newMap.getFeaturesAtPixel(e.pixel, {
         layerFilter: (layer) => layer === airportLayer,
         hitTolerance: 5,
       });
 
-      if (features && features.length > 0) {
-        setSelectedAirport(features.map((f) => f.getProperties()));
+      if (airportFeatures?.length > 0) {
+        setSelectedAirport(airportFeatures.map((f) => f.getProperties()));
         overlay.setPosition(e.coordinate);
       } else {
         setSelectedAirport([]);
         overlay.setPosition(undefined);
+      }
+
+      // Train station features
+      const stationFeatures = newMap.getFeaturesAtPixel(e.pixel, {
+        layerFilter: (layer) => layer === activeTrainStationLayer,
+        hitTolerance: 5,
+      });
+
+      if (stationFeatures?.length > 0) {
+        const trainStationData = stationFeatures.map((f) => {
+          const properties = f.getProperties();
+          return { navn: properties.navn };
+        });
+
+        setSelectedTrainStation(trainStationData);
+        trainStationOverlay.setPosition(e.coordinate);
+      } else {
+        setSelectedTrainStation([]);
+        trainStationOverlay.setPosition(undefined);
       }
     });
 
@@ -190,6 +222,9 @@ export function Application() {
           <div ref={mapRef} className="map-view">
             <div ref={overlayRef}>
               <AirportOverlay features={selectedAirport} />
+            </div>
+            <div ref={trainStationOverlayRef}>
+              <TrainStationOverlay features={selectedTrainStation} />
             </div>
             {map && <OverviewMapControl map={map} collapsed={true} />}
           </div>
