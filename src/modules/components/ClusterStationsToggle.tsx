@@ -11,7 +11,7 @@ export function ClusterStationsToggle({
 }: ClusterToggleButtonProps) {
   return (
     <button onClick={() => setUseClustering((prev) => !prev)}>
-      {useClustering ? "Turn of clusters" : "Cluster"}
+      {useClustering ? "Unclusters train stations" : "Cluster train stations"}
     </button>
   );
 }

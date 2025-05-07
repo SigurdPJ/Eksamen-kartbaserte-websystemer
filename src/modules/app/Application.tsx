@@ -9,7 +9,7 @@ import {
   trainStationLayer,
   trainStationLayerClustered,
 } from "../vectorLayers/trainStationLayer";
-import { airportLayer } from "../vectorLayers/airportLayer";
+import { airportLayer } from "../vectorLayers/airportLayer"; // Import airports layer
 import { railwayLayer } from "../vectorLayers/railwayLayer";
 import {
   measurementLayer,
@@ -26,6 +26,9 @@ import { MeasurementControls } from "../components/MeasurementControls";
 import AirportOverlay from "../components/AirportOverlay";
 import { OverviewMapControl } from "../components/OverviewMapControl";
 import { ClusterStationsToggle } from "../components/ClusterStationsToggle";
+import { ShowTrainStationsToggle } from "../components/ShowTrainStationsToggle";
+import { ShowTrainLinesToggle } from "../components/ShowTrainLinesToggle";
+import { ShowAirportsToggle } from "../components/ShowAirportsToggle";
 
 useGeographic();
 
@@ -45,6 +48,9 @@ export function Application() {
   const [activeTool, setActiveTool] = useState<"draw" | "measure" | null>(null);
   const [selectedAirport, setSelectedAirport] = useState<any[]>([]);
   const [useClustering, setUseClustering] = useState(false);
+  const [showTrainStations, setShowTrainStations] = useState(false);
+  const [showTrainlines, setShowTrainlines] = useState(false);
+  const [showAirports, setShowAirports] = useState(false);
 
   const currentLayer = getLayerByName(selectedLayer);
   const activeTrainStationLayer = useClustering
@@ -110,13 +116,26 @@ export function Application() {
     if (map) {
       map.getLayers().clear();
       map.addLayer(currentLayer);
-      map.addLayer(activeTrainStationLayer); // Clustering toggles this
-      map.addLayer(airportLayer);
-      map.addLayer(railwayLayer);
+      if (showTrainStations) {
+        map.addLayer(activeTrainStationLayer);
+      }
+      if (showTrainlines) {
+        map.addLayer(railwayLayer);
+      }
+      if (showAirports) {
+        map.addLayer(airportLayer);
+      }
       map.addLayer(drawingLayer);
       map.addLayer(measurementLayer);
     }
-  }, [currentLayer, activeTrainStationLayer, map]);
+  }, [
+    currentLayer,
+    activeTrainStationLayer,
+    showTrainStations,
+    showTrainlines,
+    showAirports,
+    map,
+  ]);
 
   return (
     <>
@@ -130,6 +149,15 @@ export function Application() {
           useClustering={useClustering}
           setUseClustering={setUseClustering}
         />
+        <ShowTrainStationsToggle
+          show={showTrainStations}
+          setShow={setShowTrainStations}
+        />
+        <ShowTrainLinesToggle
+          show={showTrainlines}
+          setShow={setShowTrainlines}
+        />
+        <ShowAirportsToggle show={showAirports} setShow={setShowAirports} />
         <br />
         <div className="control-group">
           <DrawingControls
