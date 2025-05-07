@@ -36,9 +36,12 @@ import TrainStationOverlay from "../components/TrainStationOverlay";
 useGeographic();
 
 export function Application() {
+  // Refs
   const mapRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const trainStationOverlayRef = useRef<HTMLDivElement>(null);
+
+  // States
   const [selectedLayer, setSelectedLayer] = useState("osm");
   const [view, setView] = useState(
     () =>
