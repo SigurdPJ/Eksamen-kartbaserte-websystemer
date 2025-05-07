@@ -114,8 +114,7 @@ export const DrawingControls: React.FC<DrawingControlsProps> = ({
     <div className="sidebar-controls">
       <div className="control-section" id="draw-icon-section">
         <p>
-          Velg ikoner og merk steder du liker, vil besøke eller steder du vil
-          campe.
+          Velg ikoner og merk steder du liker, og vil besøke eller vil campe på.
         </p>
         <select
           className="sidebar-button"
