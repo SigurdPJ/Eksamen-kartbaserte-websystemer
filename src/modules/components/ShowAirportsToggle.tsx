@@ -7,7 +7,7 @@ interface ShowAirportsToggleProps {
 
 export function ShowAirportsToggle({ show, setShow }: ShowAirportsToggleProps) {
   return (
-    <button onClick={() => setShow((prev) => !prev)}>
+    <button className="sidebar-button" onClick={() => setShow((prev) => !prev)}>
       {show ? "Hide Airports" : "Show Airports"}
     </button>
   );

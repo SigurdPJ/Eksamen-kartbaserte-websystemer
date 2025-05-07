@@ -10,7 +10,7 @@ export function ShowTrainLinesToggle({
   setShow,
 }: ShowTrainlinesToggleProps) {
   return (
-    <button onClick={() => setShow((prev) => !prev)}>
+    <button className="sidebar-button" onClick={() => setShow((prev) => !prev)}>
       {show ? "Hide Train Lines" : "Show Train Lines"}
     </button>
   );

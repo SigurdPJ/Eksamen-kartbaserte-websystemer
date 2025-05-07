@@ -17,3 +17,91 @@
 .ol-overviewmap .ol-overviewmap-box {
   border: 3px solid hotpink;
 }
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background-color: #b8ecff;
+  color: dodgerblue;
+  padding: 10px;
+  text-align: center;
+}
+
+.appContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+.main-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 250px;
+  padding: 1rem;
+  background-color: white;
+  overflow-y: auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  border-right: 4px dashed #b8ecff;
+}
+
+/*Kode for å velge karttype*/
+
+.layer-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.layer-option:hover {
+  background-color: #b8ecff;
+}
+
+.layer-select-dropdown {
+  border: 2px dashed #b8ecff;
+  border-radius: 4px;
+}
+
+.layer-select-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: white;
+  border: 2px solid #b8ecff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/*Styling for kontroll i sidebar*/
+.sidebar-button {
+  padding: 0.5rem 1rem;
+  background-color: white;
+  border: 2px solid #b8ecff;
+  border-radius: 4px;
+  color: dodgerblue;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.1s ease;
+  width: 100%;
+  text-align: center;
+}
+
+.sidebar-button:hover {
+  background-color: #b8ecff;
+  transform: scale(1.02);
+}

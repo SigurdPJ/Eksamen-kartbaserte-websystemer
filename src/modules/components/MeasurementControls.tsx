@@ -99,10 +99,14 @@ export const MeasurementControls: React.FC<MeasurementControlsProps> = ({
 
   return (
     <>
-      <button onClick={toggleMeasurement}>
+      <button className="sidebar-button" onClick={toggleMeasurement}>
         {activeTool === "measure" ? "Stop Measuring" : "Measure"}
       </button>
-      <button onClick={clearMeasurements} disabled={!hasMeasurements}>
+      <button
+        className="sidebar-button"
+        onClick={clearMeasurements}
+        disabled={!hasMeasurements}
+      >
         Clear
       </button>
     </>

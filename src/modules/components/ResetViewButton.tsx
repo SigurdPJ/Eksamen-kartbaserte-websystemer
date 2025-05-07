@@ -14,5 +14,9 @@ export const ResetButton: React.FC<ResetButtonProps> = ({ view }) => {
     });
   };
 
-  return <button onClick={handleClick}>Reset View</button>;
+  return (
+    <button className="sidebar-button" onClick={handleClick}>
+      Reset View
+    </button>
+  );
 };

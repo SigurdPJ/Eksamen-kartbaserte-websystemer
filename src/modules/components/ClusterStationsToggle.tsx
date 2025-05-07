@@ -10,7 +10,10 @@ export function ClusterStationsToggle({
   setUseClustering,
 }: ClusterToggleButtonProps) {
   return (
-    <button onClick={() => setUseClustering((prev) => !prev)}>
+    <button
+      className="sidebar-button"
+      onClick={() => setUseClustering((prev) => !prev)}
+    >
       {useClustering ? "Unclusters train stations" : "Cluster train stations"}
     </button>
   );

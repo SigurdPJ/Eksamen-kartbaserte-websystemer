@@ -139,52 +139,62 @@ export function Application() {
 
   return (
     <>
-      <section>
-        <LayerSelect
-          selectedLayer={selectedLayer}
-          onLayerChange={setSelectedLayer}
-        />
-        <br />
-        <ClusterStationsToggle
-          useClustering={useClustering}
-          setUseClustering={setUseClustering}
-        />
-        <ShowTrainStationsToggle
-          show={showTrainStations}
-          setShow={setShowTrainStations}
-        />
-        <ShowTrainLinesToggle
-          show={showTrainlines}
-          setShow={setShowTrainlines}
-        />
-        <ShowAirportsToggle show={showAirports} setShow={setShowAirports} />
-        <br />
-        <div className="control-group">
-          <DrawingControls
-            map={map}
-            vectorSource={drawingSource}
-            vectorLayer={drawingLayer}
-            activeTool={activeTool}
-            setActiveTool={setActiveTool}
-          />
-          <br />
-          <MeasurementControls
-            map={map}
-            source={measurementSource}
-            activeTool={activeTool}
-            setActiveTool={setActiveTool}
-          />
-          <br />
-          <ResetButton view={view} />
-          <ZoomToMeButton view={view} />
+      <section className="appContainer">
+        <header className="header">
+          <h1>Norgesferiekartet!</h1>
+        </header>
+        <div className="main-content">
+          <div className="sidebar">
+            <LayerSelect
+              selectedLayer={selectedLayer}
+              onLayerChange={setSelectedLayer}
+            />
+            <div className="toggle-controls">
+              <ClusterStationsToggle
+                useClustering={useClustering}
+                setUseClustering={setUseClustering}
+              />
+              <ShowTrainStationsToggle
+                show={showTrainStations}
+                setShow={setShowTrainStations}
+              />
+              <ShowTrainLinesToggle
+                show={showTrainlines}
+                setShow={setShowTrainlines}
+              />
+              <ShowAirportsToggle
+                show={showAirports}
+                setShow={setShowAirports}
+              />
+            </div>
+            <div className="control-group">
+              <DrawingControls
+                map={map}
+                vectorSource={drawingSource}
+                vectorLayer={drawingLayer}
+                activeTool={activeTool}
+                setActiveTool={setActiveTool}
+              />
+
+              <MeasurementControls
+                map={map}
+                source={measurementSource}
+                activeTool={activeTool}
+                setActiveTool={setActiveTool}
+              />
+
+              <ResetButton view={view} />
+              <ZoomToMeButton view={view} />
+            </div>
+          </div>
+          <div ref={mapRef} className="map-view">
+            <div ref={overlayRef}>
+              <AirportOverlay features={selectedAirport} />
+            </div>
+            {map && <OverviewMapControl map={map} collapsed={true} />}
+          </div>
         </div>
       </section>
-      <div ref={mapRef} className="map-view">
-        <div ref={overlayRef}>
-          <AirportOverlay features={selectedAirport} />
-        </div>
-        {map && <OverviewMapControl map={map} collapsed={true} />}
-      </div>
     </>
   );
 }

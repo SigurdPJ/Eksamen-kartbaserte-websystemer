@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Draw } from "ol/interaction";
 import { DrawingControlsProps } from "../interfaces/DrawingControlsProps";
+import { Icon, Style } from "ol/style";
 
 export const DrawingControls: React.FC<DrawingControlsProps> = ({
   map,
@@ -42,7 +43,18 @@ export const DrawingControls: React.FC<DrawingControlsProps> = ({
       type: drawType as any,
     });
 
-    newDraw.on("drawend", () => {
+    newDraw.on("drawend", (event) => {
+      //Lagde hjerteemoji!!!!
+      const feature = event.feature;
+      if (drawType === "Point") {
+        const iconStyle = new Style({
+          image: new Icon({
+            src: "/icons/fluent-emoji--heart-exclamation.png",
+            scale: 0.5,
+          }),
+        });
+        feature.setStyle(iconStyle);
+      }
       setHasFeatures(vectorSource.getFeatures().length > 0);
     });
 
@@ -87,15 +99,23 @@ export const DrawingControls: React.FC<DrawingControlsProps> = ({
         <option value="Circle">Circle</option>
       </select>
 
-      <button onClick={toggleDrawing}>
+      <button className="sidebar-button" onClick={toggleDrawing}>
         {activeTool === "draw" ? "Stop Drawing" : "Draw"}
       </button>
 
-      <button onClick={undoLastPoint} disabled={!hasFeatures}>
+      <button
+        className="sidebar-button"
+        onClick={undoLastPoint}
+        disabled={!hasFeatures}
+      >
         Undo
       </button>
 
-      <button onClick={clearAll} disabled={!hasFeatures}>
+      <button
+        className="sidebar-button"
+        onClick={clearAll}
+        disabled={!hasFeatures}
+      >
         Clear
       </button>
     </>
