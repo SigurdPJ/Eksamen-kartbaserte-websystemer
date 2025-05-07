@@ -11,14 +11,16 @@ const schema = "kulturminner_178e81c5b4f1432e84e3e50b55042a3e";
 
 const app = new Hono();
 
+app.get("/", (c) => c.text("Welcome to the Hono API!"));
+
 app.get("/api/culturalheritage", async (c) => {
   const result = await postgresql.query(`
-        SELECT navn, opphav, informasjon,
-               ST_AsGeoJSON(ST_Transform(lokalitet.omrade, 4326)) AS geometry
-        FROM ${schema}.lokalitet
-        WHERE synlig = true
-            LIMIT 1000
-    `);
+      SELECT navn, opphav, informasjon,
+             ST_AsGeoJSON(ST_Transform(lokalitet.omrade, 4326)) AS geometry
+      FROM ${schema}.lokalitet
+      WHERE synlig = true
+      LIMIT 1000
+  `);
 
   return c.json({
     type: "FeatureCollection",
@@ -33,6 +35,6 @@ app.get("/api/culturalheritage", async (c) => {
   });
 });
 
-// Heroku fix?
-const port = parseInt(process.env.PORT || "3000", 10);
+const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
+console.log(`Server running on port ${port}`);
 serve({ fetch: app.fetch, port });
