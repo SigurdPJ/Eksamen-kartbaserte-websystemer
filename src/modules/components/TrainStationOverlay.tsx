@@ -12,7 +12,7 @@ const TrainStationOverlay = ({
       <div className={"overlayDiv"}>
         <h3>Togstasjon</h3>
         <p>
-          <strong>Stasjonsnavn:</strong> {features[0].navn}
+          <strong>Stasjonsnavn :</strong> {features[0].navn}
         </p>
       </div>
     );
