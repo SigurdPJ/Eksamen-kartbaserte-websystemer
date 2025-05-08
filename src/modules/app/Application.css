@@ -1,11 +1,13 @@
-/* Main map container */
+* {
+  margin: unset;
+}
+
 .map-view {
   position: relative;
   width: 100%;
   height: 90%;
 }
 
-/* Mini map inside overview */
 .ol-overviewmap .ol-overviewmap-map {
   width: 200px;
   height: 200px;
@@ -26,7 +28,7 @@
 .header {
   background-color: #b8ecff;
   color: dodgerblue;
-  padding: 10px;
+  padding: 2rem;
   text-align: center;
 }
 

@@ -186,33 +186,35 @@ export function Application() {
               selectedLayer={selectedLayer}
               onLayerChange={setSelectedLayer}
             />
-            <div className="toggle-controls">
-              <ClusterStationsToggle
-                useClustering={useClustering}
-                setUseClustering={setUseClustering}
-              />
-              <ShowTrainStationsToggle
-                show={showTrainStations}
-                setShow={setShowTrainStations}
-              />
-              <ShowTrainLinesToggle
-                show={showTrainlines}
-                setShow={setShowTrainlines}
-              />
-              <ShowCountyToggle show={showCounty} setShow={setShowCounty} />
-              <ShowAirportsToggle
-                show={showAirports}
-                setShow={setShowAirports}
-              />
-            </div>
             <div className="control-group">
-              <DrawingControls
-                map={map}
-                vectorSource={drawingSource}
-                vectorLayer={drawingLayer}
-                activeTool={activeTool}
-                setActiveTool={setActiveTool}
-              />
+              <div className="toggle-controls">
+                <ShowCountyToggle show={showCounty} setShow={setShowCounty} />
+                <ShowAirportsToggle
+                  show={showAirports}
+                  setShow={setShowAirports}
+                />
+
+                <ShowTrainLinesToggle
+                  show={showTrainlines}
+                  setShow={setShowTrainlines}
+                />
+                <ShowTrainStationsToggle
+                  show={showTrainStations}
+                  setShow={setShowTrainStations}
+                />
+                <ClusterStationsToggle
+                  useClustering={useClustering}
+                  setUseClustering={setUseClustering}
+                />
+
+                <DrawingControls
+                  map={map}
+                  vectorSource={drawingSource}
+                  vectorLayer={drawingLayer}
+                  activeTool={activeTool}
+                  setActiveTool={setActiveTool}
+                />
+              </div>
               <div className="reset-zoom-panel">
                 <ResetButton view={view} />
                 <ZoomToMeButton view={view} />
