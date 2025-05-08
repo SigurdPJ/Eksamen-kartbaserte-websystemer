@@ -1,5 +1,5 @@
 import React from "react";
-import AirportProps from "../interfaces/AirportProps";
+import AirportProps from "../../interfaces/AirportProps";
 
 const AirportOverlay = ({ features }: { features: AirportProps[] }) => {
   if (features.length >= 1) {

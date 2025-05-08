@@ -1,5 +1,5 @@
 import React from "react";
-import { VectorLayerToggleProps } from "../interfaces/VectorLayerToggleProps";
+import { VectorLayerToggleProps } from "../../interfaces/VectorLayerToggleProps";
 
 export function ShowAirportsToggle({ show, setShow }: VectorLayerToggleProps) {
   return (

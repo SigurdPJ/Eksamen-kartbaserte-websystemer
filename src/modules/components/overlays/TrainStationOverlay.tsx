@@ -1,6 +1,6 @@
 import React from "react";
 
-import TrainStationProps from "../interfaces/TrainStationProps";
+import TrainStationProps from "../../interfaces/TrainStationProps";
 
 const TrainStationOverlay = ({
   features,

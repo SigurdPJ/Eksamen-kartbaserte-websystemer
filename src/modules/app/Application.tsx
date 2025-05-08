@@ -18,17 +18,17 @@ import { countyLayer } from "../vectorLayers/countyLayer";
 import { LayerSelect, getLayerByName } from "../components/LayerSelect";
 import { ZoomToMeButton } from "../components/ZoomToMeButton";
 import { ResetButton } from "../components/ResetViewButton";
-import { DrawingControls } from "../components/DrawingControls";
-import AirportOverlay from "../components/AirportOverlay";
-import { OverviewMapControl } from "../components/OverviewMapControl";
-import { ClusterStationsToggle } from "../components/ClusterStationsToggle";
-import { ShowTrainStationsToggle } from "../components/ShowTrainStationsToggle";
-import { ShowTrainLinesToggle } from "../components/ShowTrainLinesToggle";
-import { ShowAirportsToggle } from "../components/ShowAirportsToggle";
+import { DrawingControls } from "../components/controls/DrawingControls";
+import AirportOverlay from "../components/overlays/AirportOverlay";
+import { OverviewMapControl } from "../components/controls/OverviewMapControl";
+import { ClusterStationsToggle } from "../components/toggles/ClusterStationsToggle";
+import { ShowTrainStationsToggle } from "../components/toggles/ShowTrainStationsToggle";
+import { ShowTrainLinesToggle } from "../components/toggles/ShowTrainLinesToggle";
+import { ShowAirportsToggle } from "../components/toggles/ShowAirportsToggle";
 import TrainStationProps from "../interfaces/TrainStationProps";
-import TrainStationOverlay from "../components/TrainStationOverlay";
+import TrainStationOverlay from "../components/overlays/TrainStationOverlay";
 
-import { ShowCountyToggle } from "../components/ShowCountyToggle";
+import { ShowCountyToggle } from "../components/toggles/ShowCountyToggle";
 
 useGeographic();
 

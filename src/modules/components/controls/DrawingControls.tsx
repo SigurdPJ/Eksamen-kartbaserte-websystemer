@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Draw } from "ol/interaction";
-import { DrawingControlsProps } from "../interfaces/DrawingControlsProps";
+import { DrawingControlsProps } from "../../interfaces/DrawingControlsProps";
 import { Icon, Style, Stroke, Fill, Text } from "ol/style";
 import { getLength, getArea } from "ol/sphere";
 import LineString from "ol/geom/LineString";
