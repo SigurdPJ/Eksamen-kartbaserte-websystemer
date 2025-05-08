@@ -9,13 +9,13 @@
 .ol-overviewmap .ol-overviewmap-map {
   width: 200px;
   height: 200px;
-  border: 2px solid black;
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
+  border: 2px solid dodgerblue;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.8);
 }
 
 /* View indicator */
 .ol-overviewmap .ol-overviewmap-box {
-  border: 3px solid hotpink;
+  border: 3px solid dodgerblue;
 }
 
 .container {
@@ -146,6 +146,10 @@
   flex: 1;
   padding: 0.5rem 0.75rem;
 }
+.reset-zoom-panel {
+  display: flex;
+  gap: 0.5rem;
+}
 
 .control-section {
   display: flex;
@@ -154,4 +158,9 @@
   padding: 10px;
   text-align: center;
   border: solid 2px #b8ecff;
+}
+.ol-overviewmap button {
+  width: auto;
+  padding: 0 10px;
+  font-size: 0.9rem;
 }

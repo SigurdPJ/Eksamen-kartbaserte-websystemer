@@ -23,7 +23,7 @@ export const ZoomToMeButton: React.FC<ZoomToMeButtonProps> = ({ view }) => {
   };
 
   return (
-    <button className="sidebar-button" onClick={handleClick}>
+    <button className="sidebar-button half" onClick={handleClick}>
       Zoom to me
     </button>
   );

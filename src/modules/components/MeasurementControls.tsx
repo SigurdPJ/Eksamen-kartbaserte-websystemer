@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+/*import React, { useEffect, useRef, useState } from "react";
 import { Draw } from "ol/interaction";
 import { getLength } from "ol/sphere";
 import LineString from "ol/geom/LineString";
@@ -111,4 +111,4 @@ export const MeasurementControls: React.FC<MeasurementControlsProps> = ({
       </button>
     </>
   );
-};
+};*/

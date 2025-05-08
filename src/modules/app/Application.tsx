@@ -9,12 +9,8 @@ import {
   trainStationLayer,
   trainStationLayerClustered,
 } from "../vectorLayers/trainStationLayer";
-import { airportLayer } from "../vectorLayers/airportLayer"; // Import airports layer
+import { airportLayer } from "../vectorLayers/airportLayer";
 import { railwayLayer } from "../vectorLayers/railwayLayer";
-import {
-  measurementLayer,
-  measurementSource,
-} from "../vectorLayers/measurementLayer";
 import { drawingLayer, drawingSource } from "../vectorLayers/drawingLayer";
 
 // Component imports
@@ -22,7 +18,6 @@ import { LayerSelect, getLayerByName } from "../components/LayerSelect";
 import { ZoomToMeButton } from "../components/ZoomToMeButton";
 import { ResetButton } from "../components/ResetViewButton";
 import { DrawingControls } from "../components/DrawingControls";
-import { MeasurementControls } from "../components/MeasurementControls";
 import AirportOverlay from "../components/AirportOverlay";
 import { OverviewMapControl } from "../components/OverviewMapControl";
 import { ClusterStationsToggle } from "../components/ClusterStationsToggle";
@@ -71,7 +66,7 @@ export function Application() {
 
     const newMap = new Map({
       view: view,
-      layers: [currentLayer, drawingLayer, measurementLayer],
+      layers: [currentLayer, drawingLayer],
     });
 
     const overlay = new Overlay({
@@ -161,7 +156,7 @@ export function Application() {
         map.addLayer(airportLayer);
       }
       map.addLayer(drawingLayer);
-      map.addLayer(measurementLayer);
+      //map.addLayer(measurementLayer);
     }
   }, [
     currentLayer,
@@ -210,16 +205,10 @@ export function Application() {
                 activeTool={activeTool}
                 setActiveTool={setActiveTool}
               />
-
-              <MeasurementControls
-                map={map}
-                source={measurementSource}
-                activeTool={activeTool}
-                setActiveTool={setActiveTool}
-              />
-
-              <ResetButton view={view} />
-              <ZoomToMeButton view={view} />
+              <div className="reset-zoom-panel">
+                <ResetButton view={view} />
+                <ZoomToMeButton view={view} />
+              </div>
             </div>
           </div>
           <div ref={mapRef} className="map-view">

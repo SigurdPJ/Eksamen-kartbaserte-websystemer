@@ -22,8 +22,8 @@ export const OverviewMapControl = ({
           source: new OSM(),
         }),
       ],
-      collapseLabel: "»",
-      label: "«",
+      collapseLabel: "x",
+      label: "Minimap",
       collapsed,
     });
 

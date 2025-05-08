@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Draw } from "ol/interaction";
 import { DrawingControlsProps } from "../interfaces/DrawingControlsProps";
-import { Icon, Style, Stroke, Fill, Circle as CircleStyle } from "ol/style";
+import { Icon, Style, Stroke, Fill, Text } from "ol/style";
+import { getLength, getArea } from "ol/sphere";
+import LineString from "ol/geom/LineString";
+import Polygon from "ol/geom/Polygon";
+import Circle from "ol/geom/Circle";
+import Point from "ol/geom/Point";
 
 export const DrawingControls: React.FC<DrawingControlsProps> = ({
   map,
@@ -34,6 +39,109 @@ export const DrawingControls: React.FC<DrawingControlsProps> = ({
     };
   }, [vectorSource]);
 
+  const createStyle = (feature: any) => {
+    const geometry = feature.getGeometry();
+    const styles: Style[] = [];
+
+    const getRandomColor = () => {
+      const r = Math.floor(Math.random() * 256);
+      const g = Math.floor(Math.random() * 256);
+      const b = Math.floor(Math.random() * 256);
+
+      return `rgba(${r}, ${g}, ${b}, 0.5)`;
+    };
+
+    if (geometry instanceof LineString) {
+      const length = getLength(geometry, { projection: "EPSG:4326" });
+      const midpoint = geometry.getCoordinateAt(0.5);
+      const label =
+        length > 1000
+          ? `${(length / 1000).toFixed(2)} km`
+          : `${Math.round(length)} m`;
+
+      styles.push(
+        new Style({
+          stroke: new Stroke({
+            color: "#3399CC",
+            width: 2,
+          }),
+        }),
+        new Style({
+          geometry: new Point(midpoint),
+          text: new Text({
+            text: label,
+            font: "bold 14px",
+            offsetY: -15,
+          }),
+        }),
+      );
+    } else if (geometry instanceof Polygon) {
+      const area = getArea(geometry, { projection: "EPSG:4326" });
+      const perimeter = getLength(geometry.getLinearRing(0)!, {
+        projection: "EPSG:4326",
+      });
+
+      const label = `Areal: ${
+        area > 1_000_000
+          ? (area / 1_000_000).toFixed(2) + " km²"
+          : Math.round(area) + " m²"
+      } Omkrets: ${
+        perimeter > 1000
+          ? (perimeter / 1000).toFixed(2) + " km"
+          : Math.round(perimeter) + " m"
+      }`;
+
+      styles.push(
+        new Style({
+          stroke: new Stroke({
+            width: 2,
+          }),
+          fill: new Fill({
+            color: "rgba(51, 153, 204, 0.2)",
+          }),
+        }),
+        new Style({
+          geometry: geometry.getInteriorPoint(),
+          text: new Text({
+            text: label,
+            font: "bold 20px",
+            offsetY: -20, // justerer posisjonen litt opp
+          }),
+        }),
+      );
+    } else if (geometry instanceof Circle) {
+      const center = geometry.getCenter();
+      const edge = [center[0] + geometry.getRadius(), center[1]];
+      const radiusLine = new LineString([center, edge]);
+      const radius = getLength(radiusLine, { projection: "EPSG:4326" });
+      const area = Math.PI * Math.pow(radius, 2);
+
+      const text = `Radius: ${Math.round(radius)} m Areal: ${
+        area > 1_000_000
+          ? (area / 1_000_000).toFixed(2) + " km²"
+          : Math.round(area) + " m²"
+      }`;
+      const fillColor = getRandomColor();
+      styles.push(
+        new Style({
+          stroke: new Stroke({ color: "dodgerblue", width: 2 }),
+          fill: new Fill({ color: fillColor }),
+        }),
+        new Style({
+          geometry: new Point(center),
+          text: new Text({
+            text,
+            font: "bold 12px",
+            padding: [3, 5, 3, 5],
+            offsetY: -20,
+          }),
+        }),
+      );
+    }
+
+    return styles;
+  };
+
   useEffect(() => {
     if (!map) return;
 
@@ -47,11 +155,13 @@ export const DrawingControls: React.FC<DrawingControlsProps> = ({
     const newDraw = new Draw({
       source: vectorSource,
       type: isIconMode ? "Point" : drawType,
+      style: isIconMode ? undefined : (feature) => createStyle(feature),
     });
+
     newDraw.on("drawend", (event) => {
       const feature = event.feature;
 
-      if (isIconMode && drawType === "Point") {
+      if (isIconMode) {
         const iconStyle = new Style({
           image: new Icon({
             src: iconType,
@@ -60,21 +170,7 @@ export const DrawingControls: React.FC<DrawingControlsProps> = ({
         });
         feature.setStyle(iconStyle);
       } else {
-        const defaultStyle = new Style({
-          stroke: new Stroke({
-            color: "#3399CC",
-            width: 2,
-          }),
-          fill: new Fill({
-            color: "rgba(51, 153, 204, 0.2)",
-          }),
-          image: new CircleStyle({
-            radius: 5,
-            fill: new Fill({ color: "#3399CC" }),
-            stroke: new Stroke({ color: "#fff", width: 1 }),
-          }),
-        });
-        feature.setStyle(defaultStyle);
+        feature.setStyle((f) => createStyle(f));
       }
 
       setHasFeatures(vectorSource.getFeatures().length > 0);
@@ -114,7 +210,8 @@ export const DrawingControls: React.FC<DrawingControlsProps> = ({
     <div className="sidebar-controls">
       <div className="control-section" id="draw-icon-section">
         <p>
-          Velg ikoner og merk steder du liker, og vil besøke eller vil campe på.
+          Velg ikoner og merk steder du liker, vil besøke eller steder du vil
+          campe.
         </p>
         <select
           className="sidebar-button"
@@ -130,43 +227,44 @@ export const DrawingControls: React.FC<DrawingControlsProps> = ({
         <button className="sidebar-button" onClick={toggleIconMode}>
           {isIconMode ? "Avbryt" : "Plasser ikoner"}
         </button>
-
-        <div className="undo-or-delete-panel">
-          <button
-            className="sidebar-button half"
-            onClick={undoLastPoint}
-            disabled={!hasFeatures}
-          >
-            Angre
-          </button>
-          <button
-            className="sidebar-button half"
-            onClick={clearAll}
-            disabled={!hasFeatures}
-          >
-            Slett alt
-          </button>
-        </div>
       </div>
 
       <div className="control-section" id="draw-section">
-        <p>Tegn på kartet, gjør hva du vil med det!</p>
+        <p>Tegn og mål!</p>
         <select
           className="sidebar-button"
           value={drawType}
-          onChange={(e) =>
-            setDrawType(
-              e.target.value as "Point" | "LineString" | "Polygon" | "Circle",
-            )
-          } // typecasting
+          onChange={(e) => {
+            setDrawType(e.target.value as "LineString" | "Polygon" | "Circle");
+            if (!isIconMode) {
+              setActiveTool("draw");
+            }
+          }}
         >
           <option value="LineString">Linje</option>
           <option value="Polygon">Polygon</option>
-          <option value="Circle">Sirkel</option>
+          <option value="Circle">Sirkel (Partymode!! Woooh!)</option>
         </select>
 
         <button className="sidebar-button" onClick={toggleDrawing}>
           {activeTool === "draw" ? "Stopp" : "Tegn"}
+        </button>
+      </div>
+
+      <div className="undo-or-delete-panel">
+        <button
+          className="sidebar-button half"
+          onClick={undoLastPoint}
+          disabled={!hasFeatures}
+        >
+          Angre
+        </button>
+        <button
+          className="sidebar-button half"
+          onClick={clearAll}
+          disabled={!hasFeatures}
+        >
+          Slett alt
         </button>
       </div>
     </div>
