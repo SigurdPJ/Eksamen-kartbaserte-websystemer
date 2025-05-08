@@ -12,7 +12,7 @@ const railwayStyle = new Style({
 
 export const railwayLayer = new VectorLayer({
   source: new VectorSource({
-    url: "geojson/jernbanelinjer.geojson",
+    url: "/api/railways",
     format: new GeoJSON(),
   }),
   style: railwayStyle,
