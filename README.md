@@ -2,6 +2,7 @@
 
 _Eksamen KWS2100_
 
+Lenke til apllikasjonen deployet på heroku: https://glacial-headland-19848-e40b2e2c0701.herokuapp.com/
 ---
 
 **Reiseplanleggeren**
