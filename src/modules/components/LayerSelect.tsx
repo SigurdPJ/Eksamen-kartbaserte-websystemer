@@ -1,11 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
-import { LayerSelectProps } from "../interfaces/LayerSelectProps";
 import { stadiaLightLayer } from "../tileLayers/stadiaLightLayer";
 import { stadiaDarkLayer } from "../tileLayers/stadiaDarkLayer";
 import { aerialPhotoLayer } from "../tileLayers/aerialPhotoLayer";
 import { polarLayer } from "../tileLayers/polarLayer";
 import { mapboxLayer } from "../tileLayers/mapboxLayer";
 import { osmLayer } from "../tileLayers/osmLayer";
+
+interface LayerSelectProps {
+  selectedLayer: string;
+  onLayerChange: (layer: string) => void;
+}
+
 export const getLayerByName = (layerName: string) => {
   switch (layerName) {
     case "stadia-light":
