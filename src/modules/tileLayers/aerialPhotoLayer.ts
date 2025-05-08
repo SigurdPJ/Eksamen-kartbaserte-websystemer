@@ -17,7 +17,7 @@ export const aerialPhotoLayer = new TileLayer();
 
 const parser = new WMTSCapabilities();
 fetch(
-  "http://opencache.statkart.no/gatekeeper/gk/gk.open_nib_utm33_wmts_v2?SERVICE=WMTS&REQUEST=GetCapabilities",
+  "https://opencache.statkart.no/gatekeeper/gk/gk.open_nib_utm33_wmts_v2?SERVICE=WMTS&REQUEST=GetCapabilities",
 )
   .then((response) => response.text())
   .then((text) => {
