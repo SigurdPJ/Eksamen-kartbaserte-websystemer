@@ -7,7 +7,7 @@ export function ShowTrainLinesToggle({
 }: VectorLayerToggleProps) {
   return (
     <button className="sidebar-button" onClick={() => setShow((prev) => !prev)}>
-      {show ? "Hide Train Lines" : "Show Train Lines"}
+      {show ? "Gjem toglinjer" : "Vis toglinjer"}
     </button>
   );
 }

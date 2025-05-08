@@ -105,7 +105,7 @@ export const DrawingControls: React.FC<DrawingControlsProps> = ({
           text: new Text({
             text: label,
             font: "bold 20px",
-            offsetY: -20, // justerer posisjonen litt opp
+            offsetY: -20,
           }),
         }),
       );
