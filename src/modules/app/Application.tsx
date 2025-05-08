@@ -12,6 +12,7 @@ import {
 import { airportLayer } from "../vectorLayers/airportLayer";
 import { railwayLayer } from "../vectorLayers/railwayLayer";
 import { drawingLayer, drawingSource } from "../vectorLayers/drawingLayer";
+import { countyLayer } from "../vectorLayers/countyLayer";
 
 // Component imports
 import { LayerSelect, getLayerByName } from "../components/LayerSelect";
@@ -26,6 +27,8 @@ import { ShowTrainLinesToggle } from "../components/ShowTrainLinesToggle";
 import { ShowAirportsToggle } from "../components/ShowAirportsToggle";
 import TrainStationProps from "../interfaces/TrainStationProps";
 import TrainStationOverlay from "../components/TrainStationOverlay";
+
+import { ShowCountyToggle } from "../components/ShowCountyToggle";
 
 useGeographic();
 
@@ -51,6 +54,7 @@ export function Application() {
   const [useClustering, setUseClustering] = useState(false);
   const [showTrainStations, setShowTrainStations] = useState(false);
   const [showTrainlines, setShowTrainlines] = useState(false);
+  const [showCounty, setShowCounty] = useState(false);
   const [showAirports, setShowAirports] = useState(false);
   const [selectedTrainStation, setSelectedTrainStation] = useState<
     TrainStationProps[]
@@ -152,11 +156,13 @@ export function Application() {
       if (showTrainlines) {
         map.addLayer(railwayLayer);
       }
+      if (showCounty) {
+        map.addLayer(countyLayer);
+      }
       if (showAirports) {
         map.addLayer(airportLayer);
       }
       map.addLayer(drawingLayer);
-      //map.addLayer(measurementLayer);
     }
   }, [
     currentLayer,
@@ -164,6 +170,7 @@ export function Application() {
     showTrainStations,
     showTrainlines,
     showAirports,
+    showCounty,
     map,
   ]);
 
@@ -192,6 +199,7 @@ export function Application() {
                 show={showTrainlines}
                 setShow={setShowTrainlines}
               />
+              <ShowCountyToggle show={showCounty} setShow={setShowCounty} />
               <ShowAirportsToggle
                 show={showAirports}
                 setShow={setShowAirports}
