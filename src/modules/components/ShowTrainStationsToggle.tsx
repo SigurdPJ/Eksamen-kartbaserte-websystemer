@@ -1,14 +1,10 @@
 import React from "react";
-
-interface ShowTrainStationsToggleProps {
-  show: boolean;
-  setShow: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import { VectorLayerToggleProps } from "../interfaces/VectorLayerToggleProps";
 
 export function ShowTrainStationsToggle({
   show,
   setShow,
-}: ShowTrainStationsToggleProps) {
+}: VectorLayerToggleProps) {
   return (
     <button className="sidebar-button" onClick={() => setShow((prev) => !prev)}>
       {show ? "Hide train stations" : "Show train stations"}

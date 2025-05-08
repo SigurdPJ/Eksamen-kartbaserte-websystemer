@@ -1,14 +1,10 @@
 import React from "react";
-
-interface ShowTrainlinesToggleProps {
-  show: boolean;
-  setShow: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import { VectorLayerToggleProps } from "../interfaces/VectorLayerToggleProps";
 
 export function ShowTrainLinesToggle({
   show,
   setShow,
-}: ShowTrainlinesToggleProps) {
+}: VectorLayerToggleProps) {
   return (
     <button className="sidebar-button" onClick={() => setShow((prev) => !prev)}>
       {show ? "Hide Train Lines" : "Show Train Lines"}

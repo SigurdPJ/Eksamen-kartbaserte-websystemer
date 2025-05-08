@@ -1,11 +1,7 @@
 import React from "react";
+import { VectorLayerToggleProps } from "../interfaces/VectorLayerToggleProps";
 
-interface ShowAirportsToggleProps {
-  show: boolean;
-  setShow: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export function ShowAirportsToggle({ show, setShow }: ShowAirportsToggleProps) {
+export function ShowAirportsToggle({ show, setShow }: VectorLayerToggleProps) {
   return (
     <button className="sidebar-button" onClick={() => setShow((prev) => !prev)}>
       {show ? "Hide Airports" : "Show Airports"}
