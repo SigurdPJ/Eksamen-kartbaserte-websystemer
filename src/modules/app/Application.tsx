@@ -209,14 +209,7 @@ export function Application() {
             <div className="control-group">
               <div className="toggle-controls">
                 <ShowCountyToggle show={showCounty} setShow={setShowCounty} />
-                <ShowAirportsToggle
-                  show={showAirports}
-                  setShow={setShowAirports}
-                />
-                <ClusterAirportsToggle
-                  useClustering={useAirportClustering}
-                  setUseClustering={setUseAirportClustering}
-                />
+
                 <ShowTrainLinesToggle
                   show={showRailways}
                   setShow={setShowRailways}
@@ -228,6 +221,14 @@ export function Application() {
                 <ClusterStationsToggle
                   useClustering={useTrainStationClustering}
                   setUseClustering={setUseTrainStationClustering}
+                />
+                <ShowAirportsToggle
+                  show={showAirports}
+                  setShow={setShowAirports}
+                />
+                <ClusterAirportsToggle
+                  useClustering={useAirportClustering}
+                  setUseClustering={setUseAirportClustering}
                 />
                 <IconPlacementControls
                   map={map}

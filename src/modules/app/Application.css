@@ -50,7 +50,7 @@
   font-size: 0.9rem;
 }
 
-/*Selve sidebaren*/
+/*Sidebar*/
 .sidebar {
   align-items: stretch;
   width: 250px;
@@ -73,7 +73,6 @@
   padding: 10px;
   text-align: center;
   border: solid 2px #b8ecff;
-  margin-bottom: 1rem;
 }
 
 .undo-or-delete-panel {
@@ -133,7 +132,7 @@
   font-size: small;
 }
 
-/*Sidebarknapper*/
+/*Sidebar buttons*/
 .sidebar-button {
   padding: 0.5rem 1rem;
   background-color: white;
@@ -177,15 +176,12 @@
   justify-content: space-between;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  border: 2px solid #b8ecff;
-  border-radius: 4px;
+
   color: dodgerblue;
 
   background-color: white;
   cursor: pointer;
   width: 100%;
-  box-sizing: border-box;
-  margin-bottom: 1rem;
 }
 
 .cluster-label {
@@ -193,4 +189,5 @@
   font-size: small;
   display: flex;
   align-items: center;
+  gap: 0.5rem;
 }
