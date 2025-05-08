@@ -11,7 +11,7 @@ https://glacial-headland-19848-e40b2e2c0701.herokuapp.com/
 **Reiseplanleggeren**
 
 Vår applikasjon kan brukes til å finne data angående reising og transport i Norge. 
-Kartet er til god hjelp for turister eller andre reisende som ønsker å skaffe oversikt eller planlegge en reise. Man kan markere steder man har vært eller ønsker å dra og måle luftlinje og se areal, for å få et tydeligere bilde av avstander og områdestørelser. 
+Kartet er til god hjelp for turister eller andre reisende som ønsker å skaffe oversikt eller planlegge en reise. Man kan markere steder man har vært eller ønsker å dra og måle luftlinje og se areal, for å få et tydeligere bilde av avstander og områdestørrelser. 
 Vi har fremstilt knutepunker for transport; flyplasser, togstasjoner og toglinjer for dem som ikke kan reise med bil. 
 
 Applikasjonen for den utforskende turisten, de kan bruke knappene vi har lagt til og selv velge hvilken data de vil se og hvordan den skal fremstilles. Hvis de skal reise utenlands er det for eksempel nyttig å se hvilke norske flyplasser som har internasjonale flyvninger. Det er også fint å kunne se hvilke områder som har flere togstasjoner. 
