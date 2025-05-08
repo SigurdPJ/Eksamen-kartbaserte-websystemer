@@ -10,11 +10,14 @@ export function ClusterStationsToggle({
   setUseClustering,
 }: ClusterToggleButtonProps) {
   return (
-    <button
-      className="sidebar-button"
-      onClick={() => setUseClustering((prev) => !prev)}
-    >
-      {useClustering ? "Unclusters train stations" : "Cluster train stations"}
-    </button>
+    <label className="cursor-pointer">
+      Cluster togstasjoner:
+      <input
+        type="checkbox"
+        checked={useClustering}
+        onChange={() => setUseClustering((prev) => !prev)}
+        className="form-checkbox"
+      />
+    </label>
   );
 }
