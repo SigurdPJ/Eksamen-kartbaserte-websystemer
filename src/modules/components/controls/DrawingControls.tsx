@@ -1,28 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { Draw } from "ol/interaction";
-import { DrawingControlsProps } from "../../interfaces/DrawingControlsProps";
-import { Icon, Style, Stroke, Fill, Text } from "ol/style";
+import { ControlsProps } from "../../interfaces/ControlsProps";
+import { Style, Stroke, Fill, Text } from "ol/style";
 import { getLength, getArea } from "ol/sphere";
 import LineString from "ol/geom/LineString";
 import Polygon from "ol/geom/Polygon";
 import Circle from "ol/geom/Circle";
 import Point from "ol/geom/Point";
 
-export const DrawingControls: React.FC<DrawingControlsProps> = ({
+export const DrawingControls: React.FC<ControlsProps> = ({
   map,
   vectorSource,
   activeTool,
   setActiveTool,
 }) => {
-  const [drawType, setDrawType] = useState<
-    "Point" | "LineString" | "Polygon" | "Circle"
-  >("LineString");
-  const [iconType, setIconType] = useState<string>(
-    "/icons/fluent-emoji--heart-exclamation.png",
+  const [drawType, setDrawType] = useState<"LineString" | "Polygon" | "Circle">(
+    "LineString",
   );
   const [drawInteraction, setDrawInteraction] = useState<Draw | null>(null);
   const [hasFeatures, setHasFeatures] = useState(false);
-  const [isIconMode, setIsIconMode] = useState(false);
 
   useEffect(() => {
     const checkFeatures = () => {
@@ -47,7 +43,6 @@ export const DrawingControls: React.FC<DrawingControlsProps> = ({
       const r = Math.floor(Math.random() * 256);
       const g = Math.floor(Math.random() * 256);
       const b = Math.floor(Math.random() * 256);
-
       return `rgba(${r}, ${g}, ${b}, 0.5)`;
     };
 
@@ -93,12 +88,8 @@ export const DrawingControls: React.FC<DrawingControlsProps> = ({
 
       styles.push(
         new Style({
-          stroke: new Stroke({
-            width: 2,
-          }),
-          fill: new Fill({
-            color: "rgba(51, 153, 204, 0.2)",
-          }),
+          stroke: new Stroke({ width: 2 }),
+          fill: new Fill({ color: "rgba(51, 153, 204, 0.2)" }),
         }),
         new Style({
           geometry: geometry.getInteriorPoint(),
@@ -121,18 +112,17 @@ export const DrawingControls: React.FC<DrawingControlsProps> = ({
           ? (area / 1_000_000).toFixed(2) + " km²"
           : Math.round(area) + " m²"
       }`;
-      const fillColor = getRandomColor();
+
       styles.push(
         new Style({
           stroke: new Stroke({ color: "dodgerblue", width: 2 }),
-          fill: new Fill({ color: fillColor }),
+          fill: new Fill({ color: getRandomColor() }),
         }),
         new Style({
           geometry: new Point(center),
           text: new Text({
             text,
             font: "bold 12px",
-            padding: [3, 5, 3, 5],
             offsetY: -20,
           }),
         }),
@@ -154,25 +144,12 @@ export const DrawingControls: React.FC<DrawingControlsProps> = ({
 
     const newDraw = new Draw({
       source: vectorSource,
-      type: isIconMode ? "Point" : drawType,
-      style: isIconMode ? undefined : (feature) => createStyle(feature),
+      type: drawType,
+      style: (feature) => createStyle(feature),
     });
 
     newDraw.on("drawend", (event) => {
-      const feature = event.feature;
-
-      if (isIconMode) {
-        const iconStyle = new Style({
-          image: new Icon({
-            src: iconType,
-            scale: 0.5,
-          }),
-        });
-        feature.setStyle(iconStyle);
-      } else {
-        feature.setStyle((f) => createStyle(f));
-      }
-
+      event.feature.setStyle((f) => createStyle(f));
       setHasFeatures(vectorSource.getFeatures().length > 0);
     });
 
@@ -182,7 +159,7 @@ export const DrawingControls: React.FC<DrawingControlsProps> = ({
     return () => {
       map.removeInteraction(newDraw);
     };
-  }, [drawType, map, activeTool, iconType, isIconMode]);
+  }, [drawType, map, activeTool]);
 
   const undoLastPoint = () => {
     const features = vectorSource.getFeatures();
@@ -200,56 +177,25 @@ export const DrawingControls: React.FC<DrawingControlsProps> = ({
     setActiveTool(activeTool === "draw" ? null : "draw");
   };
 
-  const toggleIconMode = () => {
-    setIsIconMode(!isIconMode);
-    setDrawType("Point");
-    setActiveTool("draw");
-  };
-
   return (
-    <div className="sidebar-controls">
-      <div className="control-section" id="draw-icon-section">
-        <p>
-          Velg ikoner og merk steder du liker, vil besøke eller steder du vil
-          campe.
-        </p>
-        <select
-          className="sidebar-button"
-          value={iconType}
-          onChange={(e) => setIconType(e.target.value)}
-        >
-          <option value="/icons/fluent-emoji--heart-exclamation.png">
-            Hjerte
-          </option>
-          <option value="/icons/fluent-emoji--glowing-star.png">Stjerne</option>
-          <option value="/icons/fluent-emoji--camping.png">Camping</option>
-        </select>
-        <button className="sidebar-button" onClick={toggleIconMode}>
-          {isIconMode ? "Avbryt" : "Plasser ikoner"}
-        </button>
-      </div>
+    <div className="control-section" id="draw-section">
+      <p>Tegn og mål!</p>
+      <select
+        className="sidebar-button"
+        value={drawType}
+        onChange={(e) => {
+          setDrawType(e.target.value as "LineString" | "Polygon" | "Circle");
+          setActiveTool("draw");
+        }}
+      >
+        <option value="LineString">Linje</option>
+        <option value="Polygon">Polygon</option>
+        <option value="Circle">Sirkel (Partymode!! Woooh!)</option>
+      </select>
 
-      <div className="control-section" id="draw-section">
-        <p>Tegn og mål!</p>
-        <select
-          className="sidebar-button"
-          value={drawType}
-          onChange={(e) => {
-            setDrawType(e.target.value as "LineString" | "Polygon" | "Circle");
-            if (!isIconMode) {
-              setActiveTool("draw");
-            }
-          }}
-        >
-          <option value="LineString">Linje</option>
-          <option value="Polygon">Polygon</option>
-          <option value="Circle">Sirkel (Partymode!! Woooh!)</option>
-        </select>
-
-        <button className="sidebar-button" onClick={toggleDrawing}>
-          {activeTool === "draw" ? "Stopp" : "Tegn"}
-        </button>
-      </div>
+      <button className="sidebar-button" onClick={toggleDrawing}>
+        {activeTool === "draw" ? "Stopp" : "Tegn"}
+      </button>
 
       <div className="undo-or-delete-panel">
         <button

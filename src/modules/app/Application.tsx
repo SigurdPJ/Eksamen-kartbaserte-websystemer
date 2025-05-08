@@ -33,6 +33,8 @@ import TrainStationOverlay from "../components/overlays/TrainStationOverlay";
 import { ShowCountyToggle } from "../components/toggles/ShowCountyToggle";
 import { ClusterAirportsToggle } from "../components/toggles/ClusterAirportsToggle";
 import { FeatureLike } from "ol/Feature";
+import { IconPlacementControls } from "../components/controls/IconPlacementControls";
+import { iconLayer, iconSource } from "../vectorLayers/iconLayer";
 
 useGeographic();
 
@@ -53,7 +55,7 @@ export function Application() {
       }),
   );
   const [map, setMap] = useState<Map | null>(null);
-  const [activeTool, setActiveTool] = useState<"draw" | "measure" | null>(null);
+  const [activeTool, setActiveTool] = useState<"draw" | "icon" | null>(null);
   const [selectedAirport, setSelectedAirport] = useState<any[]>([]);
   const [useTrainStationClustering, setUseTrainStationClustering] =
     useState(false);
@@ -179,6 +181,7 @@ export function Application() {
         map.addLayer(activeAirportLayer);
       }
       map.addLayer(drawingLayer);
+      map.addLayer(iconLayer);
     }
   }, [
     currentLayer,
@@ -226,7 +229,13 @@ export function Application() {
                   useClustering={useTrainStationClustering}
                   setUseClustering={setUseTrainStationClustering}
                 />
-
+                <IconPlacementControls
+                  map={map}
+                  activeTool={activeTool}
+                  setActiveTool={setActiveTool}
+                  vectorSource={iconSource}
+                  vectorLayer={iconLayer}
+                />
                 <DrawingControls
                   map={map}
                   vectorSource={drawingSource}
