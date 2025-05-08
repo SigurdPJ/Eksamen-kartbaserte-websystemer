@@ -198,7 +198,7 @@ export function Application() {
     <>
       <section className="appContainer">
         <header className="header">
-          <h1>Norgesferie - The map! </h1>
+          <h1>Reiseplanleggeren</h1>
         </header>
         <div className="main-content">
           <div className="sidebar">
