@@ -2,6 +2,33 @@
   margin: unset;
 }
 
+/*Applayout*/
+.appContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/*Header*/
+.header {
+  background-color: #b8ecff;
+  color: dodgerblue;
+  padding: 2rem;
+  text-align: center;
+}
+
+/*Minimap*/
 .map-view {
   position: relative;
   width: 100%;
@@ -11,37 +38,19 @@
   width: 200px;
   height: 200px;
   border: 2px solid dodgerblue;
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.8);
 }
 
-/* View indicator */
 .ol-overviewmap .ol-overviewmap-box {
   border: 3px solid dodgerblue;
 }
 
-.container {
-  display: flex;
-  flex-direction: column;
+.ol-overviewmap button {
+  width: auto;
+  padding: 0 10px;
+  font-size: 0.9rem;
 }
 
-.header {
-  background-color: #b8ecff;
-  color: dodgerblue;
-  padding: 2rem;
-  text-align: center;
-}
-
-.appContainer {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-}
-.main-content {
-  display: flex;
-  flex: 1;
-  overflow: hidden;
-}
-
+/*Selve sidebaren*/
 .sidebar {
   align-items: stretch;
   width: 250px;
@@ -51,13 +60,33 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  border-right: 4px dashed #b8ecff;
+  border-right: 4px solid #b8ecff;
   max-height: 100vh;
   overflow-y: auto;
 }
 
-/*Kode for å velge karttype*/
+/*Sidebar control*/
+.control-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 10px;
+  text-align: center;
+  border: solid 2px #b8ecff;
+  margin-bottom: 1rem;
+}
 
+.undo-or-delete-panel {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.reset-zoom-panel {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/*Layerselect*/
 .layer-option {
   display: flex;
   flex-direction: column;
@@ -71,6 +100,7 @@
 .layer-option:hover {
   background-color: #b8ecff;
 }
+
 .layer-select-wrapper {
   position: relative;
   width: 100%;
@@ -102,7 +132,8 @@
   flex-direction: column;
   font-size: small;
 }
-/*Styling for kontroll i sidebar*/
+
+/*Sidebarknapper*/
 .sidebar-button {
   padding: 0.5rem 1rem;
   background-color: white;
@@ -122,6 +153,7 @@
   transform: scale(1.02);
 }
 
+/*Overlay*/
 .overlayDiv {
   display: flex;
   flex-direction: column;
@@ -132,36 +164,33 @@
   border-radius: 1rem;
   font-size: 12px;
 }
+
 .overlayIcon {
   width: 24px;
   height: 24px;
   margin-bottom: 0.5rem;
 }
 
-.undo-or-delete-panel {
+.cluster-container {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 2px solid #b8ecff;
+  border-radius: 4px;
+  color: dodgerblue;
+
+  background-color: white;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 1rem;
 }
 
-.undo-or-delete-panel .sidebar-button {
-  flex: 1;
-  padding: 0.5rem 0.75rem;
-}
-.reset-zoom-panel {
+.cluster-label {
+  color: dodgerblue;
+  font-size: small;
   display: flex;
-  gap: 0.5rem;
-}
-
-.control-section {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  padding: 10px;
-  text-align: center;
-  border: solid 2px #b8ecff;
-}
-.ol-overviewmap button {
-  width: auto;
-  padding: 0 10px;
-  font-size: 0.9rem;
+  align-items: center;
 }
