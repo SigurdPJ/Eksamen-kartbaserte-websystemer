@@ -13,10 +13,9 @@
     "db:culturalheritage": "npm run db:culturalheritage:download && npm run db:culturalheritage:import",
     "db:culturalheritage:download": "download --extract --out tmp/ https://nedlasting.geonorge.no/geonorge/Kulturminner/Kulturminner/PostGIS/Kulturminner_0000_Norge_25833_Kulturminner_PostGIS.zip",
     "db:culturalheritage:import": "docker exec -i /postgis /usr/bin/psql --user postgres < tmp/Kulturminner_0000_Norge_25833_Kulturminner_PostGIS.sql",
-    "db:heroku:postgis": "echo 'create extension postgis' | psql $DATABASE_URL",
-    "db:culturalheritage:heroku": "npm run db:culturalheritage:download && psql $DATABASE_URL < tmp/Kulturminner_0000_Norge_25833_Kulturminner_PostGIS.sql",
-    "db:heroku:setup": "npm run db:heroku:postgis && npm run db:culturalheritage:heroku",
-    "db:heroku": "npm run db:heroku:postgis && npm run db:culturalheritage:heroku"
+    "db:heroku": "npm run db:heroku:postgis && npm run db:heroku:data && npm run db:heroku:prepare",
+    "db:heroku:data": "npm run db:culturalheritage:download && psql $DATABASE_URL < tmp/Kulturminner_0000_Norge_25833_Kulturminner_PostGIS.sql",
+    "db:heroku:prepare": "psql $DATABASE_URL < scripts/prepare-db.sql"
   },
   "keywords": [],
   "author": "",
