@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Draw } from "ol/interaction";
 import { Icon, Style } from "ol/style";
 import { ControlsProps } from "../../interfaces/ControlsProps";
+import Feature from "ol/Feature";
+import Point from "ol/geom/Point";
 
 export const IconPlacementControls: React.FC<ControlsProps> = ({
   map,
@@ -16,9 +18,61 @@ export const IconPlacementControls: React.FC<ControlsProps> = ({
   const [drawInteraction, setDrawInteraction] = useState<Draw | null>(null);
   const [hasIcons, setHasIcons] = useState(false);
 
+  const saveIconsToLocalStorage = () => {
+    const features = vectorSource.getFeatures();
+    const data = features
+      .map((feature) => {
+        const geometry = feature.getGeometry();
+        const coords =
+          geometry?.getType() === "Point"
+            ? (geometry as Point).getCoordinates()
+            : undefined;
+
+        const style = feature.getStyle();
+        let iconSrc: string | undefined;
+        if (style instanceof Style) {
+          const image = style.getImage();
+          if (image instanceof Icon) {
+            iconSrc = image.getSrc();
+          }
+        }
+
+        return {
+          coordinates: coords,
+          icon: iconSrc,
+        };
+      })
+      .filter((item) => item.coordinates && item.icon); // Remove invalid entries
+
+    localStorage.setItem("placedIcons", JSON.stringify(data));
+  };
+
+  const loadIconsFromLocalStorage = () => {
+    const data = localStorage.getItem("placedIcons");
+    if (!data) return;
+
+    const parsed = JSON.parse(data);
+    parsed.forEach(
+      ({ coordinates, icon }: { coordinates: number[]; icon: string }) => {
+        const feature = new Feature(new Point(coordinates));
+        feature.setStyle(
+          new Style({
+            image: new Icon({
+              src: icon,
+              scale: 0.5,
+            }),
+          }),
+        );
+        vectorSource.addFeature(feature);
+      },
+    );
+    setHasIcons(parsed.length > 0);
+  };
+
   useEffect(() => {
     if (!map) return;
     map.addLayer(vectorLayer);
+    loadIconsFromLocalStorage();
 
     return () => {
       map.removeLayer(vectorLayer);
@@ -51,6 +105,7 @@ export const IconPlacementControls: React.FC<ControlsProps> = ({
         }),
       );
       setHasIcons(vectorSource.getFeatures().length > 0);
+      saveIconsToLocalStorage();
     });
 
     map.addInteraction(newDraw);
@@ -63,6 +118,7 @@ export const IconPlacementControls: React.FC<ControlsProps> = ({
 
   const clearIcons = () => {
     vectorSource.clear();
+    localStorage.removeItem("placedIcons");
     setHasIcons(false);
   };
 
