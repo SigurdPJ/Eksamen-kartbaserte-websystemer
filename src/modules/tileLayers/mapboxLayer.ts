@@ -1,3 +1,7 @@
+/*
+  Source: https://openlayers.org/en/latest/examples/mapbox-vector-tiles.html
+*/
+
 import VectorTileLayer from "ol/layer/VectorTile";
 import VectorTileSource from "ol/source/VectorTile";
 import MVT from "ol/format/MVT";
