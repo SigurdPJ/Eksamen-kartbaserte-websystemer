@@ -31,7 +31,6 @@ const airportSource = new VectorSource({
   format: new GeoJSON(),
 });
 
-// Noraml version
 const airplaneIconStyle = new Style({
   image: new Icon({
     src: "/icons/fluent-emoji--airplane.png",
@@ -48,7 +47,6 @@ export const airportLayer = new VectorLayer({
   style: airplaneIconStyle,
 });
 
-// Clustered version
 const clusterSource = new Cluster({
   distance: 40,
   minDistance: 20,
@@ -59,23 +57,50 @@ const clusterSource = new Cluster({
 const styleCache: Record<number, Style> = {};
 
 const clusterStyle = (feature: FeatureLike) => {
-  const size = feature.get("features").length;
-  if (!styleCache[size]) {
-    styleCache[size] = new Style({
-      image: new Icon({
-        src: "/icons/fluent-emoji--airplane.png",
-        scale: 0.5,
-        anchor: [0.5, 1],
-      }),
-      text: new Text({
-        text: size > 1 ? size.toString() : "",
-        fill: new Fill({ color: "black" }),
-        font: "bold 16px Arial",
-        offsetY: 8,
-      }),
-    });
+  const features = feature.get("features");
+  const size = features.length;
+
+  if (size > 1) {
+    if (!styleCache[size]) {
+      styleCache[size] = new Style({
+        image: new Icon({
+          src: "/icons/fluent-emoji--airplane.png",
+          scale: 0.5,
+          anchor: [0.5, 1],
+        }),
+        text: new Text({
+          text: size.toString(),
+          fill: new Fill({ color: "black" }),
+          font: "16px Arial",
+          offsetY: 8,
+        }),
+      });
+    }
+    return styleCache[size];
   }
-  return styleCache[size];
+
+  const singleFeature = features[0];
+  const utland = singleFeature.get("utland");
+  const hasInternationalFlights = utland > 0;
+
+  return new Style({
+    image: new Icon({
+      src: hasInternationalFlights
+        ? "/icons/fluent-emoji--world-map.png"
+        : "/icons/fluent-emoji--airplane.png",
+      scale: 0.5,
+      anchor: [0.5, 1],
+    }),
+    text: hasInternationalFlights
+      ? new Text({
+          text: "Internasjonal",
+          fill: new Fill({ color: "black" }),
+          font: " 14px Arial",
+          offsetY: 10,
+          textAlign: "center",
+        })
+      : undefined,
+  });
 };
 
 export const airportLayerClustered = new VectorLayer({
