@@ -9,7 +9,10 @@ import {
   trainStationLayer,
   trainStationLayerClustered,
 } from "../vectorLayers/trainStationLayer";
-import { airportLayer } from "../vectorLayers/airportLayer";
+import {
+  airportLayer,
+  airportLayerClustered,
+} from "../vectorLayers/airportLayer";
 import { railwayLayer } from "../vectorLayers/railwayLayer";
 import { drawingLayer, drawingSource } from "../vectorLayers/drawingLayer";
 import { countyLayer } from "../vectorLayers/countyLayer";
@@ -27,8 +30,9 @@ import { ShowTrainLinesToggle } from "../components/toggles/ShowTrainLinesToggle
 import { ShowAirportsToggle } from "../components/toggles/ShowAirportsToggle";
 import TrainStationProps from "../interfaces/TrainStationProps";
 import TrainStationOverlay from "../components/overlays/TrainStationOverlay";
-
 import { ShowCountyToggle } from "../components/toggles/ShowCountyToggle";
+import { ClusterAirportsToggle } from "../components/toggles/ClusterAirportsToggle";
+import { FeatureLike } from "ol/Feature";
 
 useGeographic();
 
@@ -51,9 +55,11 @@ export function Application() {
   const [map, setMap] = useState<Map | null>(null);
   const [activeTool, setActiveTool] = useState<"draw" | "measure" | null>(null);
   const [selectedAirport, setSelectedAirport] = useState<any[]>([]);
-  const [useClustering, setUseClustering] = useState(false);
+  const [useTrainStationClustering, setUseTrainStationClustering] =
+    useState(false);
+  const [useAirportClustering, setUseAirportClustering] = useState(false);
   const [showTrainStations, setShowTrainStations] = useState(false);
-  const [showTrainlines, setShowTrainlines] = useState(false);
+  const [showRailways, setShowRailways] = useState(false);
   const [showCounty, setShowCounty] = useState(false);
   const [showAirports, setShowAirports] = useState(false);
   const [selectedTrainStation, setSelectedTrainStation] = useState<
@@ -61,9 +67,12 @@ export function Application() {
   >([]);
 
   const currentLayer = getLayerByName(selectedLayer);
-  const activeTrainStationLayer = useClustering
+  const activeTrainStationLayer = useTrainStationClustering
     ? trainStationLayerClustered
     : trainStationLayer;
+  const activeAirportLayer = useAirportClustering
+    ? airportLayerClustered
+    : airportLayer;
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -88,12 +97,19 @@ export function Application() {
     newMap.on("click", (e) => {
       // Airport features
       const airportFeatures = newMap.getFeaturesAtPixel(e.pixel, {
-        layerFilter: (layer) => layer === airportLayer,
+        layerFilter: (layer) => layer === activeAirportLayer,
         hitTolerance: 5,
       });
 
       if (airportFeatures?.length > 0) {
-        setSelectedAirport(airportFeatures.map((f) => f.getProperties()));
+        const features = airportFeatures[0].get("features");
+        if (features) {
+          setSelectedAirport(
+            features.map((feature: FeatureLike) => feature.getProperties()),
+          );
+        } else {
+          setSelectedAirport([airportFeatures[0].getProperties()]);
+        }
         overlay.setPosition(e.coordinate);
       } else {
         setSelectedAirport([]);
@@ -153,22 +169,23 @@ export function Application() {
       if (showTrainStations) {
         map.addLayer(activeTrainStationLayer);
       }
-      if (showTrainlines) {
+      if (showRailways) {
         map.addLayer(railwayLayer);
       }
       if (showCounty) {
         map.addLayer(countyLayer);
       }
       if (showAirports) {
-        map.addLayer(airportLayer);
+        map.addLayer(activeAirportLayer);
       }
       map.addLayer(drawingLayer);
     }
   }, [
     currentLayer,
     activeTrainStationLayer,
+    activeAirportLayer,
     showTrainStations,
-    showTrainlines,
+    showRailways,
     showAirports,
     showCounty,
     map,
@@ -193,18 +210,21 @@ export function Application() {
                   show={showAirports}
                   setShow={setShowAirports}
                 />
-
+                <ClusterAirportsToggle
+                  useClustering={useAirportClustering}
+                  setUseClustering={setUseAirportClustering}
+                />
                 <ShowTrainLinesToggle
-                  show={showTrainlines}
-                  setShow={setShowTrainlines}
+                  show={showRailways}
+                  setShow={setShowRailways}
                 />
                 <ShowTrainStationsToggle
                   show={showTrainStations}
                   setShow={setShowTrainStations}
                 />
                 <ClusterStationsToggle
-                  useClustering={useClustering}
-                  setUseClustering={setUseClustering}
+                  useClustering={useTrainStationClustering}
+                  setUseClustering={setUseTrainStationClustering}
                 />
 
                 <DrawingControls

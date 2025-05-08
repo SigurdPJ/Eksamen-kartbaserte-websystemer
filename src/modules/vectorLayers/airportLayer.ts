@@ -31,6 +31,24 @@ const airportSource = new VectorSource({
   format: new GeoJSON(),
 });
 
+// Noraml version
+const airplaneIconStyle = new Style({
+  image: new Icon({
+    src: "/icons/fluent-emoji--airplane.png",
+    scale: 0.5,
+    anchor: [0.5, 1],
+  }),
+});
+
+export const airportLayer = new VectorLayer({
+  source: new VectorSource({
+    url: "geojson/flyplasser.geojson",
+    format: new GeoJSON(),
+  }),
+  style: airplaneIconStyle,
+});
+
+// Clustered version
 const clusterSource = new Cluster({
   distance: 40,
   minDistance: 20,
@@ -60,7 +78,7 @@ const clusterStyle = (feature: FeatureLike) => {
   return styleCache[size];
 };
 
-export const airportLayer = new VectorLayer({
+export const airportLayerClustered = new VectorLayer({
   source: clusterSource,
   style: clusterStyle,
 });

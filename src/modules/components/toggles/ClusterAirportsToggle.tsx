@@ -1,13 +1,13 @@
 import React from "react";
 import { ClusterToggleButtonProps } from "../../interfaces/ClusterToggleButtonProps";
 
-export function ClusterStationsToggle({
+export function ClusterAirportsToggle({
   useClustering,
   setUseClustering,
 }: ClusterToggleButtonProps) {
   return (
     <label className="cursor-pointer">
-      Cluster togstasjoner:
+      Cluster flyplasser:
       <input
         type="checkbox"
         checked={useClustering}
