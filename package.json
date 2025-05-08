@@ -13,7 +13,7 @@
     "db:railways": "npm run db:railways:download && npm run db:railways:import",
     "db:railways:download": "download --extract --out tmp/ https://nedlasting.geonorge.no/geonorge/Samferdsel/Banenettverk/PostGIS/Samferdsel_0000_Norge_25833_Banenettverk_PostGIS.zip",
     "db:railways:import": "docker exec -i /postgis /usr/bin/psql --user postgres < tmp/Samferdsel_0000_Norge_25833_Banenettverk_PostGIS.sql",
-    "db:heroku:postgis": "echo 'create extension postgis' | psql ",
+    "db:heroku:postgis": "echo 'create extension postgis' | psql \"$DATABASE_URL\"",
     "db:railways:heroku": "npm run db:railways:download && psql < tmp/Samferdsel_0000_Norge_25833_Banenettverk_PostGIS.sql",
     "db:heroku": "npm run db:heroku:postgis && npm run db:railways:heroku"
   },
