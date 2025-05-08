@@ -1,3 +1,7 @@
+/*
+  Source: https://openlayers.org/en/latest/examples/cluster.html
+*/
+
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import Cluster from "ol/source/Cluster";

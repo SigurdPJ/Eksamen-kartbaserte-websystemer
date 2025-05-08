@@ -1,3 +1,7 @@
+/*
+  Source: https://openlayers.org/en/latest/examples/overviewmap.html
+*/
+
 import { useEffect } from "react";
 import OverviewMap from "ol/control/OverviewMap";
 import TileLayer from "ol/layer/Tile";

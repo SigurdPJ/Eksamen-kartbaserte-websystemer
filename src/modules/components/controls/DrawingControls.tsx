@@ -1,3 +1,7 @@
+/*
+  Source: https://openlayers.org/en/latest/examples/measure-style.html
+*/
+
 import React, { useState, useEffect } from "react";
 import { Draw } from "ol/interaction";
 import { ControlsProps } from "../../interfaces/ControlsProps";
