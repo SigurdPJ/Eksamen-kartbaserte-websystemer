@@ -52,6 +52,8 @@ Applikasjonen for den utforskende turisten, de kan bruke knappene vi har lagt ti
 
 11. Vi har stylet nettstedet med konsekvent styling med temaet vårt reising tatt i betraktning.
 
+12. Ikonene lagres til localStorage.
+
 ---
 
 **Prosessen vår:**
