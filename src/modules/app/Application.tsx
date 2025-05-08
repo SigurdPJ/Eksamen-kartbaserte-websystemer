@@ -202,6 +202,9 @@ export function Application() {
         </header>
         <div className="main-content">
           <div className="sidebar">
+            <ResetButton view={view} />
+            <ZoomToMeButton view={view} />
+
             <LayerSelect
               selectedLayer={selectedLayer}
               onLayerChange={setSelectedLayer}
@@ -244,10 +247,6 @@ export function Application() {
                   activeTool={activeTool}
                   setActiveTool={setActiveTool}
                 />
-              </div>
-              <div className="reset-zoom-panel">
-                <ResetButton view={view} />
-                <ZoomToMeButton view={view} />
               </div>
             </div>
           </div>

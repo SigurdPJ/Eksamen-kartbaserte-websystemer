@@ -63,6 +63,7 @@
   border-right: 4px solid #b8ecff;
   max-height: 100vh;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /*Sidebar control*/
@@ -76,11 +77,6 @@
 }
 
 .undo-or-delete-panel {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.reset-zoom-panel {
   display: flex;
   gap: 0.5rem;
 }
