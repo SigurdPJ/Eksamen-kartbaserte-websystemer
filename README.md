@@ -1,4 +1,4 @@
-# Reiseplanlegger – Kartbasert Websystem
+# Reiseplanlegger
 
 **Utviklet av Amalie Sanchez Ulriksen og Sigurd Jongers**.
 
@@ -35,7 +35,7 @@ Prosjektet ble utviklet over tre intensive dager, med hovedfokus på funksjonali
 
 ## Arbeidsprosess
 
-- Prosjektet ble i tett samarbeid
+- Prosjektet ble gjennomført i tett samarbeid
 - Bruk av GitHub med hyppige commits med tydelige kommentarer
 - Grundig planlegging av datastruktur og funksjonalitet før oppstart
 - Håndtering av tekniske utfordringer, inkludert begrensninger i Heroku: Opprinnelig datasett med kulturminner ble byttet ut på grunn av størrelse
